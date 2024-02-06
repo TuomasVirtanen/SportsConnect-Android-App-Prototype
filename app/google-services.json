@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "497872850980",
+    "project_id": "sportsconnect-14aea",
+    "storage_bucket": "sportsconnect-14aea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497872850980:android:c96e24e6b318792848c8b1",
+        "android_client_info": {
+          "package_name": "fi.tuni.sportsconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl3M6_0Vu-wV4IkZ8C_KxEvn_3Q65O_oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
