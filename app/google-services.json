@@ -12,7 +12,20 @@
           "package_name": "fi.tuni.sportsconnect"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "497872850980-ttvfupd3a6ammabck9o4an7e3bchf7mm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fi.tuni.sportsconnect",
+            "certificate_hash": "06153c507ab96c42a33d2285243a7c2044289d9a"
+          }
+        },
+        {
+          "client_id": "497872850980-ptlaejqd5mbnp0rq8n9euiko760fks44.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDl3M6_0Vu-wV4IkZ8C_KxEvn_3Q65O_oM"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497872850980-ptlaejqd5mbnp0rq8n9euiko760fks44.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
