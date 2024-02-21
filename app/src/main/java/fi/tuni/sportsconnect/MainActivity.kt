@@ -31,21 +31,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import fi.tuni.sportsconnect.screens.HomeScreen
 import fi.tuni.sportsconnect.ui.theme.SportsConnectTheme
 import fi.tuni.sportsconnect.screens.SignInScreen
+import fi.tuni.sportsconnect.screens.SignUpScreen
 import fi.tuni.sportsconnect.screens.SplashScreen
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//     Alkukokeilu:
-//    private val googleAuthUiClient by lazy {
-//        GoogleAuth(
-//            context = applicationContext,
-//            oneTapClient = com.google.android.gms.auth.api.identity.Identity.getSignInClient(applicationContext)
-//        )
-//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
         setContent {
             SportsConnectTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
@@ -62,84 +55,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-//            SportsConnectTheme {
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colors.background
-//                ) {
-//                    val navController = rememberNavController()
-//                    NavHost(navController = navController, startDestination = "sign_in") {
-//                        composable("sign_in") {
-//                            val viewModel = viewModel<SignInViewModel>()
-//                            val state by viewModel.state.collectAsStateWithLifecycle()
-//
-//                            LaunchedEffect(key1 = Unit) {
-//                                if(googleAuthUiClient.getSignedInUser() != null) {
-//                                    navController.navigate("profile")
-//                                }
-//                            }
-//
-//                            val launcher = rememberLauncherForActivityResult(
-//                                contract = ActivityResultContracts.StartIntentSenderForResult(),
-//                                onResult = { result ->
-//                                    if(result.resultCode == RESULT_OK) {
-//                                        lifecycleScope.launch {
-//                                            val signInResult = googleAuthUiClient.signInWithIntent(
-//                                                intent = result.data ?: return@launch
-//                                            )
-//                                            viewModel.onSignInResult(signInResult)
-//                                        }
-//                                    }
-//                                }
-//                            )
-//
-//                            LaunchedEffect(key1 = state.isSignInSuccessful) {
-//                                if(state.isSignInSuccessful) {
-//                                    Toast.makeText(
-//                                        applicationContext,
-//                                        "Sign in successful",
-//                                        Toast.LENGTH_LONG
-//                                    ).show()
-//
-//                                    navController.navigate("profile")
-//                                    viewModel.resetState()
-//                                }
-//                            }
-//
-//                            SignInScreen(
-//                                state = state,
-//                                onSignInClick = {
-//                                    lifecycleScope.launch {
-//                                        val signInIntentSender = googleAuthUiClient.signIn()
-//                                        launcher.launch(
-//                                            IntentSenderRequest.Builder(
-//                                                signInIntentSender ?: return@launch
-//                                            ).build()
-//                                        )
-//                                    }
-//                                }
-//                            )
-//                        }
-//                        composable("profile") {
-//                            ProfileScreen(
-//                                userData = googleAuthUiClient.getSignedInUser(),
-//                                onSignOut = {
-//                                    lifecycleScope.launch {
-//                                        googleAuthUiClient.signOut()
-//                                        Toast.makeText(
-//                                            applicationContext,
-//                                            "Kirjauduttu ulos",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
-//
-//                                        navController.popBackStack()
-//                                    }
-//                                })
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }
@@ -162,9 +77,9 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
         SignInScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
-//    composable(SIGN_UP_SCREEN) {
-//        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-//    }
+    composable(SIGN_UP_SCREEN) {
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
 
     composable(SPLASH_SCREEN) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })

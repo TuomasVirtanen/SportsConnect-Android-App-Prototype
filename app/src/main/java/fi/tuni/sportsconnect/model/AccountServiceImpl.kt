@@ -1,7 +1,9 @@
 package fi.tuni.sportsconnect.model
 
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
@@ -10,14 +12,19 @@ import javax.inject.Inject
 class AccountServiceImpl @Inject constructor(): AccountService {
     override val currentUser: Flow<User?>
         get() = callbackFlow {
-            TODO("Not yet implemented")
+            val listener = FirebaseAuth.AuthStateListener { auth ->
+                this.trySend(auth.currentUser?.let { User(it.uid) })
+            }
+
+            Firebase.auth.addAuthStateListener(listener)
+            awaitClose { Firebase.auth.removeAuthStateListener(listener) }
         }
 
     override val currentUserId: String
         get() = Firebase.auth.currentUser?.uid.orEmpty()
 
     override fun hasUser(): Boolean {
-        return false
+        return Firebase.auth.currentUser != null
     }
 
     override suspend fun signIn(email: String, password: String) {
@@ -29,10 +36,10 @@ class AccountServiceImpl @Inject constructor(): AccountService {
     }
 
     override suspend fun signOut() {
-        TODO("Not yet implemented")
+        Firebase.auth.signOut()
     }
 
     override suspend fun deleteAccount() {
-        TODO("Not yet implemented")
+        Firebase.auth.currentUser!!.delete().await()
     }
 }

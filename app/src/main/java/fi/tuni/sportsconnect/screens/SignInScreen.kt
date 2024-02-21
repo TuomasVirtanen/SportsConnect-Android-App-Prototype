@@ -114,10 +114,11 @@ fun SignInScreen(
             .fillMaxWidth()
             .padding(4.dp))
 
-        TextButton(onClick = { viewModel.onSignInClick(openAndPopUp) }) {
+        TextButton(onClick = { viewModel.onSignUpClick(openAndPopUp) }) {
             Text(
                 text = "Luo uusi käyttäjä",
-                fontSize = 16.sp)
+                fontSize = 16.sp
+            )
         }
     }
 }
