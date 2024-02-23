@@ -23,10 +23,10 @@ class CreateProfileViewModel @Inject constructor(
     val lastName = MutableStateFlow("")
     val bio = MutableStateFlow("")
     val career = MutableStateFlow("")
-    val cities: MutableStateFlow<MutableList<String>> = MutableStateFlow(mutableListOf(""))
+    val city = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
     val currentTeam = MutableStateFlow("")
-    val positions: MutableStateFlow<MutableList<String>> = MutableStateFlow(mutableListOf(""))
+    val position = MutableStateFlow("")
     val searchingForTeam: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val strengths = MutableStateFlow("")
 
@@ -46,8 +46,8 @@ class CreateProfileViewModel @Inject constructor(
         career.value = newCareer
     }
 
-    fun updateCities(newCity: String) {
-        cities.value[0] = cities.value[0] + newCity
+    fun updateCity(newCity: String) {
+        city.value = newCity
     }
 
     fun updatePhoneNumber(newPhoneNumber: String) {
@@ -58,8 +58,8 @@ class CreateProfileViewModel @Inject constructor(
         currentTeam.value = newCurrentTeam
     }
 
-    fun updatePositions(newPosition: String) {
-        positions.value[0] = positions.value[0] + newPosition
+    fun updatePosition(newPosition: String) {
+        position.value = newPosition
     }
 
     fun updateSearchingForTeam() {
@@ -76,13 +76,13 @@ class CreateProfileViewModel @Inject constructor(
                 accountService.currentUserId,
                 bio.value,
                 career.value,
-                cities.value,
+                mutableListOf(city.value),
                 mapOf("email" to Firebase.auth.currentUser?.email.orEmpty(),
                     "phoneNumber" to phoneNumber.value),
                 currentTeam.value,
                 firstName.value,
                 lastName.value,
-                positions.value,
+                mutableListOf(position.value),
                 searchingForTeam.value,
                 strengths.value
                 ))

@@ -37,10 +37,10 @@ fun CreatePlayerProfileScreen(
     val lastName = viewModel.lastName.collectAsState()
     val bio = viewModel.bio.collectAsState()
     val career = viewModel.career.collectAsState()
-    val cities = viewModel.cities.collectAsState()
+    val city = viewModel.city.collectAsState()
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val currentTeam = viewModel.currentTeam.collectAsState()
-    val positions = viewModel.positions.collectAsState()
+    val position = viewModel.position.collectAsState()
     val searchingForTeam = viewModel.searchingForTeam.collectAsState()
     val strengths = viewModel.strengths.collectAsState()
 
@@ -146,8 +146,8 @@ fun CreatePlayerProfileScreen(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            value = cities.value[0],
-            onValueChange = { viewModel.updateCities(it) },
+            value = city.value,
+            onValueChange = { viewModel.updateCity(it) },
             placeholder = { Text("Kaupunki/kunta missä haluat pelata") },
         )
 
@@ -206,8 +206,8 @@ fun CreatePlayerProfileScreen(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            value = positions.value[0],
-            onValueChange = { viewModel.updatePositions(it) },
+            value = position.value,
+            onValueChange = { viewModel.updatePosition(it) },
             placeholder = { Text("Pelipaikka") },
         )
 
