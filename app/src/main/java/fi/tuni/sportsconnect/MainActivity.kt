@@ -28,6 +28,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.AndroidEntryPoint
+import fi.tuni.sportsconnect.model.AccountService
+import fi.tuni.sportsconnect.screens.CreatePlayerProfileScreen
 import fi.tuni.sportsconnect.screens.HomeScreen
 import fi.tuni.sportsconnect.ui.theme.SportsConnectTheme
 import fi.tuni.sportsconnect.screens.SignInScreen
@@ -79,6 +81,10 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
 
     composable(SIGN_UP_SCREEN) {
         SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
+    
+    composable(CREATE_PLAYER_PROFILE) {
+        CreatePlayerProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
 
     composable(SPLASH_SCREEN) {

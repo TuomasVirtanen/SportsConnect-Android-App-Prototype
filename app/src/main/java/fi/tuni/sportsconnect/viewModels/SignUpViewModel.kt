@@ -1,15 +1,19 @@
 package fi.tuni.sportsconnect.viewModels
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fi.tuni.sportsconnect.CREATE_PLAYER_PROFILE
 import fi.tuni.sportsconnect.HOME_SCREEN
 import fi.tuni.sportsconnect.SIGN_UP_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
+import fi.tuni.sportsconnect.model.FirestoreService
+import fi.tuni.sportsconnect.model.PlayerAccount
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val accountService: AccountService
+    private val accountService: AccountService,
+    private val firestoreService: FirestoreService
 ) : SportsConnectAppViewModel() {
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
@@ -34,7 +38,7 @@ class SignUpViewModel @Inject constructor(
             }
 
             accountService.signUp(email.value, password.value)
-            openAndPopUp(HOME_SCREEN, SIGN_UP_SCREEN)
+            openAndPopUp(CREATE_PLAYER_PROFILE, SIGN_UP_SCREEN)
         }
     }
 }
