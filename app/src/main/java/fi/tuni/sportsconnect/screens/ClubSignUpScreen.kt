@@ -1,11 +1,12 @@
 package fi.tuni.sportsconnect.screens
 
+import fi.tuni.sportsconnect.viewModels.ClubSignUpViewModel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,22 +29,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import fi.tuni.sportsconnect.ui.theme.Purple200
-import fi.tuni.sportsconnect.viewModels.EmailSignInViewModel
+import fi.tuni.sportsconnect.viewModels.PlayerSignUpViewModel
 
 @Composable
-fun SignInScreen(
+fun ClubSignUpScreen(
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: EmailSignInViewModel = hiltViewModel()
+    viewModel: ClubSignUpViewModel = hiltViewModel(),
 ) {
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
+    val confirmPassword = viewModel.confirmPassword.collectAsState()
 
     Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -65,9 +66,9 @@ fun SignInScreen(
                 unfocusedIndicatorColor = Color.Transparent
             ),
             value = email.value,
-            onValueChange = {viewModel.updateEmail(it)},
-            placeholder = {Text("Sähköposti")},
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email")},
+            onValueChange = { viewModel.updateEmail(it) },
+            placeholder = { Text("Sähköposti") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
         )
 
         OutlinedTextField(
@@ -86,45 +87,48 @@ fun SignInScreen(
                 unfocusedIndicatorColor = Color.Transparent
             ),
             value = password.value,
-            onValueChange = {viewModel.updatePassword(it)},
-            placeholder = {Text("Salasana")},
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email")},
+            onValueChange = { viewModel.updatePassword(it) },
+            placeholder = { Text("Salasana") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = confirmPassword.value,
+            onValueChange = { viewModel.updateConfirmPassword(it) },
+            placeholder = { Text("Vahvista salasana") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
             visualTransformation = PasswordVisualTransformation()
         )
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
-        )
+            .padding(12.dp))
 
         Button(
-            onClick = { viewModel.onSignInClick(openAndPopUp) },
+            onClick = { viewModel.onSignUpClick(openAndPopUp) },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp, 0.dp)
         ) {
             Text(
-                text = "Kirjaudu sisään",
+                text = "Luo tili seuralle",
                 fontSize = 16.sp,
                 modifier = modifier.padding(0.dp, 6.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp))
-
-        TextButton(onClick = { viewModel.onPlayerSignUpClick(openAndPopUp) }) {
-            Text(
-                text = "Luo uusi tili pelaajana",
-                fontSize = 16.sp
-            )
-        }
-
-        TextButton(onClick = { viewModel.onClubSignUpClick(openAndPopUp) }) {
-            Text(
-                text = "Luo uusi tili seuralle",
-                fontSize = 16.sp
             )
         }
     }

@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.ui.theme.Purple200
-import fi.tuni.sportsconnect.viewModels.CreateProfileViewModel
+import fi.tuni.sportsconnect.viewModels.CreatePlayerProfileViewModel
 
 @Composable
 fun CreatePlayerProfileScreen(
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CreateProfileViewModel = hiltViewModel()
+    viewModel: CreatePlayerProfileViewModel = hiltViewModel()
 ) {
     val firstName = viewModel.firstName.collectAsState()
     val lastName = viewModel.lastName.collectAsState()

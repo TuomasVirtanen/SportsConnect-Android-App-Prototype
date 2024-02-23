@@ -1,7 +1,6 @@
 package fi.tuni.sportsconnect.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,13 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.ui.theme.Purple200
-import fi.tuni.sportsconnect.viewModels.SignUpViewModel
+import fi.tuni.sportsconnect.viewModels.PlayerSignUpViewModel
 
 @Composable
 fun SignUpScreen(
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: PlayerSignUpViewModel = hiltViewModel(),
 ) {
     val email = viewModel.email.collectAsState()
     val password = viewModel.password.collectAsState()
@@ -127,7 +125,7 @@ fun SignUpScreen(
                 .padding(16.dp, 0.dp)
         ) {
             Text(
-                text = "Luo käyttäjä",
+                text = "Luo tili pelaajana",
                 fontSize = 16.sp,
                 modifier = modifier.padding(0.dp, 6.dp)
             )

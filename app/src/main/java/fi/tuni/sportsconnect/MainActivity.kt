@@ -29,6 +29,8 @@ import androidx.navigation.navArgument
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.AndroidEntryPoint
 import fi.tuni.sportsconnect.model.AccountService
+import fi.tuni.sportsconnect.screens.ClubSignUpScreen
+import fi.tuni.sportsconnect.screens.CreateClubProfileScreen
 import fi.tuni.sportsconnect.screens.CreatePlayerProfileScreen
 import fi.tuni.sportsconnect.screens.HomeScreen
 import fi.tuni.sportsconnect.ui.theme.SportsConnectTheme
@@ -76,15 +78,23 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
     }
 
     composable(SIGN_IN_SCREEN) {
-        SignInScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        SignInScreen(openAndPopUp = { route, popUp, -> appState.navigate(route) })
     }
 
-    composable(SIGN_UP_SCREEN) {
+    composable(PLAYER_SIGN_UP_SCREEN) {
         SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
+
+    composable(CLUB_SIGN_UP_SCREEN) {
+        ClubSignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
     
     composable(CREATE_PLAYER_PROFILE) {
-        CreatePlayerProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
+        CreatePlayerProfileScreen(openAndPopUp = { route, popUp -> appState.clearAndNavigate(route) })
+    }
+
+    composable(CREATE_CLUB_PROFILE) {
+        CreateClubProfileScreen(openAndPopUp = { route, popUp -> appState.clearAndNavigate(route) })
     }
 
     composable(SPLASH_SCREEN) {

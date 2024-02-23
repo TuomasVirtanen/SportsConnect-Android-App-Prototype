@@ -32,7 +32,32 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
             .document(playerAccountId).delete().await()
     }
 
+    override suspend fun createClubProfile(newClubAccount: ClubAccount) {
+        Firebase.firestore
+            .collection(CLUB_ACCOUNT_COLLECTION)
+            .document(newClubAccount.id).set(newClubAccount).await()
+    }
+
+    override suspend fun readClubProfile(clubAccountId: String): ClubAccount? {
+        return Firebase.firestore
+            .collection(CLUB_ACCOUNT_COLLECTION)
+            .document(clubAccountId).get().await().toObject()
+    }
+
+    override suspend fun updateClubProfile(clubAccount: ClubAccount) {
+        Firebase.firestore
+            .collection(CLUB_ACCOUNT_COLLECTION)
+            .document(clubAccount.id).set(clubAccount).await()
+    }
+
+    override suspend fun deleteClubProfile(clubAccountId: String) {
+        Firebase.firestore
+            .collection(CLUB_ACCOUNT_COLLECTION)
+            .document(clubAccountId).delete().await()
+    }
+
     companion object {
         private const val PLAYER_ACCOUNT_COLLECTION = "playerAccounts"
+        private const val CLUB_ACCOUNT_COLLECTION = "clubAccounts"
     }
 }
