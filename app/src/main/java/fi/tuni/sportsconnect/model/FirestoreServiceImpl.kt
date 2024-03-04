@@ -7,6 +7,11 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreServiceImpl @Inject constructor(private val auth: AccountService): FirestoreService {
+    override suspend fun isUserPlayer(): Boolean {
+        return Firebase.firestore
+            .collection(PLAYER_ACCOUNT_COLLECTION)
+            .document(auth.currentUserId).get().await().exists()
+    }
 
     override suspend fun createPlayerProfile(newPlayerAccount: PlayerAccount) {
         Firebase.firestore
@@ -56,8 +61,33 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
             .document(clubAccountId).delete().await()
     }
 
+    override suspend fun createPost(newPost: Post) {
+        Firebase.firestore
+            .collection(POST_COLLECTION)
+            .add(newPost).await()
+    }
+
+    override suspend fun readPost(postId: String): Post? {
+        return Firebase.firestore
+            .collection(POST_COLLECTION)
+            .document(postId).get().await().toObject()
+    }
+
+    override suspend fun updatePost(post: Post) {
+        Firebase.firestore
+            .collection(POST_COLLECTION)
+            .document(post.id).set(post).await()
+    }
+
+    override suspend fun deletePost(postId: String) {
+        Firebase.firestore
+            .collection(POST_COLLECTION)
+            .document(postId).delete().await()
+    }
+
     companion object {
         private const val PLAYER_ACCOUNT_COLLECTION = "playerAccounts"
         private const val CLUB_ACCOUNT_COLLECTION = "clubAccounts"
+        private const val POST_COLLECTION = "posts"
     }
 }

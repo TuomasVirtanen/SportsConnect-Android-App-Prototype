@@ -1,6 +1,7 @@
 package fi.tuni.sportsconnect
 
-const val HOME_SCREEN = "HomeScreen"
+const val PLAYER_HOME_SCREEN = "PlayerHomeScreen"
+const val CLUB_HOME_SCREEN = "ClubHomeScreen"
 const val SIGN_IN_SCREEN = "SignInScreen"
 const val PLAYER_SIGN_UP_SCREEN = "PlayerSignUpScreen"
 const val CLUB_SIGN_UP_SCREEN = "ClubSignUpScreen"

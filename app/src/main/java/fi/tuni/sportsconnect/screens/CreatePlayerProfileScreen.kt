@@ -41,6 +41,7 @@ fun CreatePlayerProfileScreen(
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val currentTeam = viewModel.currentTeam.collectAsState()
     val position = viewModel.position.collectAsState()
+    val leagueLevel = viewModel.position.collectAsState()
     val searchingForTeam = viewModel.searchingForTeam.collectAsState()
     val strengths = viewModel.strengths.collectAsState()
 
@@ -148,7 +149,7 @@ fun CreatePlayerProfileScreen(
             ),
             value = city.value,
             onValueChange = { viewModel.updateCity(it) },
-            placeholder = { Text("Kaupunki/kunta missä haluat pelata") },
+            placeholder = { Text("Paikkakunta missä haluat pelata") },
         )
 
         OutlinedTextField(
@@ -209,6 +210,26 @@ fun CreatePlayerProfileScreen(
             value = position.value,
             onValueChange = { viewModel.updatePosition(it) },
             placeholder = { Text("Pelipaikka") },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = leagueLevel.value,
+            onValueChange = { viewModel.updateLeagueLevel(it) },
+            placeholder = { Text("Sarjataso, jossa haluat pelata") },
         )
 
         Switch(

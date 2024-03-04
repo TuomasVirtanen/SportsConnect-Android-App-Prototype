@@ -4,7 +4,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.CREATE_PLAYER_PROFILE
-import fi.tuni.sportsconnect.HOME_SCREEN
+import fi.tuni.sportsconnect.PLAYER_HOME_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.FirestoreService
 import fi.tuni.sportsconnect.model.PlayerAccount
@@ -24,6 +24,7 @@ class CreatePlayerProfileViewModel @Inject constructor(
     val phoneNumber = MutableStateFlow("")
     val currentTeam = MutableStateFlow("")
     val position = MutableStateFlow("")
+    val leagueLevel = MutableStateFlow("")
     val searchingForTeam: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val strengths = MutableStateFlow("")
 
@@ -59,6 +60,10 @@ class CreatePlayerProfileViewModel @Inject constructor(
         position.value = newPosition
     }
 
+    fun updateLeagueLevel(newLevel: String) {
+        leagueLevel.value = newLevel
+    }
+
     fun updateSearchingForTeam() {
         searchingForTeam.value = !(searchingForTeam.value)
     }
@@ -79,11 +84,12 @@ class CreatePlayerProfileViewModel @Inject constructor(
                 currentTeam.value,
                 firstName.value,
                 lastName.value,
+                mutableListOf(leagueLevel.value),
                 mutableListOf(position.value),
                 searchingForTeam.value,
                 strengths.value
                 ))
-            openAndPopUp(HOME_SCREEN, CREATE_PLAYER_PROFILE)
+            openAndPopUp(PLAYER_HOME_SCREEN, CREATE_PLAYER_PROFILE)
         }
     }
 }

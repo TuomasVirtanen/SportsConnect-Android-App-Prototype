@@ -1,0 +1,66 @@
+package fi.tuni.sportsconnect.viewModels
+
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import fi.tuni.sportsconnect.ADD_POST_SCREEN
+import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
+import fi.tuni.sportsconnect.CREATE_CLUB_PROFILE
+import fi.tuni.sportsconnect.model.AccountService
+import fi.tuni.sportsconnect.model.ClubAccount
+import fi.tuni.sportsconnect.model.FirestoreService
+import fi.tuni.sportsconnect.model.Post
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Date
+import javax.inject.Inject
+
+@HiltViewModel
+class AddPostViewModel @Inject constructor(
+    private val accountService: AccountService,
+    private val firestoreService: FirestoreService
+): SportsConnectAppViewModel(){
+    val position = MutableStateFlow ("Pelipaikka")
+    val header = MutableStateFlow("")
+    val text = MutableStateFlow("")
+    private val clubAccount = MutableStateFlow(ClubAccount())
+    val expanded = MutableStateFlow(false)
+
+    fun updatePosition(newPosition: String) {
+        position.value = newPosition
+    }
+
+    fun updateHeader(newHeader: String) {
+        header.value = newHeader
+    }
+
+    fun updateText(newText: String) {
+        text.value = newText
+    }
+
+    fun updateExpanded() {
+        expanded.value = !expanded.value
+    }
+
+    fun onFinishClick(openAndPopUp: (String, String) -> Unit) {
+        launchCatching {
+            clubAccount.value = firestoreService.readClubProfile(accountService.currentUserId)!!
+        }
+
+        launchCatching {
+            firestoreService.createPost(
+                Post(
+                    header = header.value,
+                    text = text.value,
+                    positions = mutableListOf(position.value) ,
+                    club = mutableMapOf(
+                        "clubName" to clubAccount.value.clubName,
+                        "city" to clubAccount.value.city
+                    ),
+                    created = Timestamp(Date())
+                )
+            )
+            openAndPopUp(CLUB_PROFILE_SCREEN, ADD_POST_SCREEN)
+        }
+    }
+}

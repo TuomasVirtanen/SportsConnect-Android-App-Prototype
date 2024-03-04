@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableOpenTarget
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,11 +53,12 @@ import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.screens.AddPostScreen
+import fi.tuni.sportsconnect.screens.ClubHomeScreen
 import fi.tuni.sportsconnect.screens.ClubProfileScreen
 import fi.tuni.sportsconnect.screens.ClubSignUpScreen
 import fi.tuni.sportsconnect.screens.CreateClubProfileScreen
 import fi.tuni.sportsconnect.screens.CreatePlayerProfileScreen
-import fi.tuni.sportsconnect.screens.HomeScreen
+import fi.tuni.sportsconnect.screens.PlayerHomeScreen
 import fi.tuni.sportsconnect.ui.theme.SportsConnectTheme
 import fi.tuni.sportsconnect.screens.SignInScreen
 import fi.tuni.sportsconnect.screens.SignUpScreen
@@ -68,139 +70,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SportsConnectTheme {
-                val navItems = listOf(
-                    BottomNavItem(
-                        title = "Etusivu",
-                        selectedIcon = Icons.Filled.Home,
-                        unselectedIcon = Icons.Outlined.Home,
-                        hasNews = false,
-                        route = HOME_SCREEN,
-                    ),
-                    BottomNavItem(
-                        title = "Julkaise",
-                        selectedIcon = Icons.Filled.AddCircle,
-                        unselectedIcon = Icons.Outlined.Add,
-                        hasNews = false,
-                        route = ADD_POST_SCREEN
-                    ),
-                    BottomNavItem(
-                        title = "Profiili",
-                        selectedIcon = Icons.Filled.AccountCircle,
-                        unselectedIcon = Icons.Outlined.AccountCircle,
-                        hasNews = false,
-                        route = CLUB_PROFILE_SCREEN
-                    ),
-                )
-
-                var selectedNavItemIndex by rememberSaveable {
-                    mutableStateOf(0)
-                }
-
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    val appState = rememberAppState()
-
-                    Scaffold(
-                        bottomBar = {
-                            if(appState.shouldShowBottomNavBar) {
-                                NavigationBar {
-                                    navItems.forEachIndexed { index, bottomNavItem ->
-                                        NavigationBarItem(
-                                            label = {
-                                                Text(bottomNavItem.title)
-                                            },
-                                            selected = selectedNavItemIndex == index,
-                                            onClick = {
-                                                selectedNavItemIndex = index
-                                                appState.navigate(bottomNavItem.route)
-                                            },
-                                            icon = {
-                                                BadgedBox(
-                                                    badge = {
-                                                        if (bottomNavItem.hasNews) {
-                                                            Badge()
-                                                        }
-                                                    }
-                                                ) {
-                                                    Icon(
-                                                        imageVector = if (index == selectedNavItemIndex) {
-                                                            bottomNavItem.selectedIcon
-                                                        } else bottomNavItem.unselectedIcon,
-                                                        ""
-                                                    )
-                                                }
-                                            })
-                                    }
-                                }
-                            }
-                        }
-                    ) {innerPaddingModifier ->
-                        NavHost(
-                            navController = appState.navController,
-                            startDestination = SPLASH_SCREEN,
-                            modifier = Modifier.padding(innerPaddingModifier)
-                        ) {
-                            sportsConnectGraph(appState)
-                        }
-                    }
-                }
-            }
+            SportsConnectApp()
         }
     }
 }
-
-@Composable
-fun rememberAppState(navController: NavHostController = rememberNavController()) =
-    remember(navController) {
-        AppState(navController)
-    }
-
-fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
-    composable(HOME_SCREEN) {
-
-        HomeScreen(
-            restartApp = { route -> appState.clearAndNavigate(route) },
-            openScreen = { route -> appState.navigate(route) }
-        )
-    }
-
-    composable(ADD_POST_SCREEN) {
-        AddPostScreen()
-    }
-
-    composable(CLUB_PROFILE_SCREEN) {
-        ClubProfileScreen()
-    }
-
-    composable(SIGN_IN_SCREEN) {
-        SignInScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-    composable(PLAYER_SIGN_UP_SCREEN) {
-        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-    composable(CLUB_SIGN_UP_SCREEN) {
-        ClubSignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-    
-    composable(CREATE_PLAYER_PROFILE) {
-        CreatePlayerProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-    composable(CREATE_CLUB_PROFILE) {
-        CreateClubProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-
-    composable(SPLASH_SCREEN) {
-        SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
-    }
-}
-
-data class BottomNavItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val route: String
-)

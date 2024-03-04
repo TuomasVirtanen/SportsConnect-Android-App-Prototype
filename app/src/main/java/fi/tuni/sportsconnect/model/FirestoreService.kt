@@ -1,6 +1,7 @@
 package fi.tuni.sportsconnect.model
 
 interface FirestoreService {
+    suspend fun isUserPlayer(): Boolean
     suspend fun createPlayerProfile(playerAccount: PlayerAccount)
     suspend fun readPlayerProfile(playerAccountId: String): PlayerAccount?
     suspend fun updatePlayerProfile(playerAccount: PlayerAccount)
@@ -9,4 +10,8 @@ interface FirestoreService {
     suspend fun readClubProfile(clubAccountId: String): ClubAccount?
     suspend fun updateClubProfile(clubAccount: ClubAccount)
     suspend fun deleteClubProfile(clubAccountId: String)
+    suspend fun createPost(post: Post)
+    suspend fun readPost(postId: String): Post?
+    suspend fun updatePost(post: Post)
+    suspend fun deletePost(postId: String)
 }
