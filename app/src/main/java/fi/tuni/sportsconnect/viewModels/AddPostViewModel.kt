@@ -1,12 +1,9 @@
 package fi.tuni.sportsconnect.viewModels
 
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.ADD_POST_SCREEN
 import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
-import fi.tuni.sportsconnect.CREATE_CLUB_PROFILE
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.ClubAccount
 import fi.tuni.sportsconnect.model.FirestoreService

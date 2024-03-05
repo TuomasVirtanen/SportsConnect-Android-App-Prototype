@@ -20,6 +20,7 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
                     .dataObjects()
             }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val posts: Flow<List<Post>>
         get() =
             auth.currentUser.flatMapLatest {
@@ -33,10 +34,10 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
             .document(auth.currentUserId).get().await().exists()
     }
 
-    override suspend fun createPlayerProfile(newPlayerAccount: PlayerAccount) {
+    override suspend fun createPlayerProfile(playerAccount: PlayerAccount) {
         Firebase.firestore
             .collection(PLAYER_ACCOUNT_COLLECTION)
-            .document(newPlayerAccount.id).set(newPlayerAccount).await()
+            .document(playerAccount.id).set(playerAccount).await()
     }
 
     override suspend fun readPlayerProfile(playerAccountId: String): PlayerAccount? {
@@ -57,10 +58,10 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
             .document(playerAccountId).delete().await()
     }
 
-    override suspend fun createClubProfile(newClubAccount: ClubAccount) {
+    override suspend fun createClubProfile(clubAccount: ClubAccount) {
         Firebase.firestore
             .collection(CLUB_ACCOUNT_COLLECTION)
-            .document(newClubAccount.id).set(newClubAccount).await()
+            .document(clubAccount.id).set(clubAccount).await()
     }
 
     override suspend fun readClubProfile(clubAccountId: String): ClubAccount? {
@@ -81,10 +82,10 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
             .document(clubAccountId).delete().await()
     }
 
-    override suspend fun createPost(newPost: Post) {
+    override suspend fun createPost(post: Post) {
         Firebase.firestore
             .collection(POSTS_COLLECTION)
-            .add(newPost).await()
+            .add(post).await()
     }
 
     override suspend fun readPost(postId: String): Post? {
