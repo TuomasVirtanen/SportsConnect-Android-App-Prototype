@@ -1,6 +1,10 @@
 package fi.tuni.sportsconnect.model
 
+import kotlinx.coroutines.flow.Flow
+
 interface FirestoreService {
+    val players: Flow<List<PlayerAccount>>
+    val posts: Flow<List<Post>>
     suspend fun isUserPlayer(): Boolean
     suspend fun createPlayerProfile(playerAccount: PlayerAccount)
     suspend fun readPlayerProfile(playerAccountId: String): PlayerAccount?

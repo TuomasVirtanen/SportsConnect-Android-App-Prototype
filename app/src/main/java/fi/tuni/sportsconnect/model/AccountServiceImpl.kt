@@ -10,10 +10,10 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AccountServiceImpl @Inject constructor(): AccountService {
-    override val currentUser: Flow<PlayerAccount?>
+    override val currentUser: Flow<User?>
         get() = callbackFlow {
             val listener = FirebaseAuth.AuthStateListener { auth ->
-                this.trySend(auth.currentUser?.let { PlayerAccount(it.uid) })
+                this.trySend(auth.currentUser?.let { User(it.uid) })
             }
 
             Firebase.auth.addAuthStateListener(listener)

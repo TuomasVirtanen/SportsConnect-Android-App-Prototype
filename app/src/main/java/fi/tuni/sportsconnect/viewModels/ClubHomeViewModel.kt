@@ -12,9 +12,10 @@ class ClubHomeViewModel @Inject constructor(
     private val accountService: AccountService,
     private val firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
+    val players = firestoreService.players
     fun initialize(restartApp: (String) -> Unit) {
         launchCatching {
-
+            // TODO: kun tehdään filteröinti, players.value = ...
         }
 
         observeAuthState(restartApp)

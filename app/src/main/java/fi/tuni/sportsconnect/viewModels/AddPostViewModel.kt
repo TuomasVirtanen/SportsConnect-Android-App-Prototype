@@ -45,9 +45,6 @@ class AddPostViewModel @Inject constructor(
     fun onFinishClick(openAndPopUp: (String, String) -> Unit) {
         launchCatching {
             clubAccount.value = firestoreService.readClubProfile(accountService.currentUserId)!!
-        }
-
-        launchCatching {
             firestoreService.createPost(
                 Post(
                     header = header.value,

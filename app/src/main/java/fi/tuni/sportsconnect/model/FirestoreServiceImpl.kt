@@ -1,12 +1,32 @@
 package fi.tuni.sportsconnect.model
 
+import com.google.firebase.firestore.dataObjects
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreServiceImpl @Inject constructor(private val auth: AccountService): FirestoreService {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val players: Flow<List<PlayerAccount>>
+        get() =
+            auth.currentUser.flatMapLatest {
+                Firebase.firestore
+                    .collection(PLAYER_ACCOUNT_COLLECTION)
+                    .dataObjects()
+            }
+
+    override val posts: Flow<List<Post>>
+        get() =
+            auth.currentUser.flatMapLatest {
+                Firebase.firestore
+                    .collection(POSTS_COLLECTION)
+                    .dataObjects()
+            }
     override suspend fun isUserPlayer(): Boolean {
         return Firebase.firestore
             .collection(PLAYER_ACCOUNT_COLLECTION)
@@ -63,31 +83,31 @@ class FirestoreServiceImpl @Inject constructor(private val auth: AccountService)
 
     override suspend fun createPost(newPost: Post) {
         Firebase.firestore
-            .collection(POST_COLLECTION)
+            .collection(POSTS_COLLECTION)
             .add(newPost).await()
     }
 
     override suspend fun readPost(postId: String): Post? {
         return Firebase.firestore
-            .collection(POST_COLLECTION)
+            .collection(POSTS_COLLECTION)
             .document(postId).get().await().toObject()
     }
 
     override suspend fun updatePost(post: Post) {
         Firebase.firestore
-            .collection(POST_COLLECTION)
+            .collection(POSTS_COLLECTION)
             .document(post.id).set(post).await()
     }
 
     override suspend fun deletePost(postId: String) {
         Firebase.firestore
-            .collection(POST_COLLECTION)
+            .collection(POSTS_COLLECTION)
             .document(postId).delete().await()
     }
 
     companion object {
         private const val PLAYER_ACCOUNT_COLLECTION = "playerAccounts"
         private const val CLUB_ACCOUNT_COLLECTION = "clubAccounts"
-        private const val POST_COLLECTION = "posts"
+        private const val POSTS_COLLECTION = "posts"
     }
 }
