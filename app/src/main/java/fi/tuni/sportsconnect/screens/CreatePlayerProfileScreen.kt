@@ -41,7 +41,7 @@ fun CreatePlayerProfileScreen(
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val currentTeam = viewModel.currentTeam.collectAsState()
     val position = viewModel.position.collectAsState()
-    val leagueLevel = viewModel.position.collectAsState()
+    val leagueLevel = viewModel.leagueLevel.collectAsState()
     val searchingForTeam = viewModel.searchingForTeam.collectAsState()
     val strengths = viewModel.strengths.collectAsState()
 
