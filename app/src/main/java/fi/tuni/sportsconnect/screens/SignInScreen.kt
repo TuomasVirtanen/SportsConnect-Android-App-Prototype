@@ -1,7 +1,6 @@
 package fi.tuni.sportsconnect.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,10 +31,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.ui.theme.Dark
-import fi.tuni.sportsconnect.ui.theme.Purple200
 import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.EmailSignInViewModel
