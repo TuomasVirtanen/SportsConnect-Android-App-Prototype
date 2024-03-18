@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">SportsConnect</string>
     <string name="web_client_id">497872850980-ptlaejqd5mbnp0rq8n9euiko760fks44.apps.googleusercontent.com</string>
+    <string name="email">Sähköposti</string>
+    <string name="password">Salasana</string>
+    <string name="log_in">Kirjaudu sisään</string>
+    <string name="player_sign_up">Luo uusi tili pelaajana</string>
+    <string name="club_sign_up">Luo uusi tili joukkueelle</string>
 </resources>
