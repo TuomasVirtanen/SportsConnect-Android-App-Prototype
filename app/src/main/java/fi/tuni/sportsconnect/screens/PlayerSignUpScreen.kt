@@ -93,7 +93,7 @@ fun SignUpScreen(
             value = password.value,
             onValueChange = { viewModel.updatePassword(it) },
             placeholder = { Text(stringResource(R.string.password)) },
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Password") },
             visualTransformation = PasswordVisualTransformation()
         )
 
@@ -115,7 +115,7 @@ fun SignUpScreen(
             value = confirmPassword.value,
             onValueChange = { viewModel.updateConfirmPassword(it) },
             placeholder = { Text(stringResource(R.string.confirm_password)) },
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Email") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Confirm Password") },
             visualTransformation = PasswordVisualTransformation()
         )
 

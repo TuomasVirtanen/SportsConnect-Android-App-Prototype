@@ -8,8 +8,6 @@ data class ClubAccount(
     val city: String = "",
     val bio: String? = null,
     val contactInfo: Map<String, String>? = null,
-//    val teams: Map<String, String>? = null,
+    val leagueLevel: String = "",
     val trainingPlaceAndTime: String? = null,
-) {
-
-}
+)

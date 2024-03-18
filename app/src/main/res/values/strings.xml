@@ -19,4 +19,9 @@
     <string name="strengths">Vahvuudet pelaajana</string>
     <string name="searching_for_team">Etsin joukkuetta</string>
     <string name="ready">Valmis</string>
+    <string name="club_name">Joukkueen nimi</string>
+    <string name="club_city">Paikkakunta</string>
+    <string name="club_bio">Lyhyt kuvaus joukkueesta</string>
+    <string name="club_level">Sarjataso</string>
+    <string name="training_place">Joukkueen harjoituspaikat ja -ajat</string>
 </resources>

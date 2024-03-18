@@ -8,7 +8,6 @@ import fi.tuni.sportsconnect.CREATE_CLUB_PROFILE
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.ClubAccount
 import fi.tuni.sportsconnect.model.FirestoreService
-import fi.tuni.sportsconnect.model.PlayerAccount
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -20,13 +19,8 @@ class CreateClubProfileViewModel @Inject constructor(
     val clubName = MutableStateFlow("")
     val city = MutableStateFlow("")
     val bio = MutableStateFlow("")
+    val leagueLevel = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
-//    val firstTeam = MutableStateFlow("")
-//    val firstTeamLevel = MutableStateFlow("")
-//    val secondTeam = MutableStateFlow("")
-//    val secondTeamLevel = MutableStateFlow("")
-//    val thirdTeam = MutableStateFlow("")
-//    val thirdTeamLevel = MutableStateFlow("")
     val trainingPlaceAndTime = MutableStateFlow("")
 
     fun updateClubName(newClubName: String) {
@@ -40,44 +34,19 @@ class CreateClubProfileViewModel @Inject constructor(
         bio.value = newBio
     }
 
+    fun updateLeagueLevel(newLeagueLevel: String) {
+        leagueLevel.value = newLeagueLevel
+    }
+
     fun updatePhoneNumber(newPhoneNumber: String) {
         phoneNumber.value = newPhoneNumber
     }
-//
-//    fun updateFirstTeam(newFirstTeam: String) {
-//        firstTeam.value = newFirstTeam
-//    }
-//
-//    fun updateFirstTeamLevel(newFirstTeamLevel: String) {
-//        firstTeamLevel.value = newFirstTeamLevel
-//    }
-//
-//    fun updateSecondTeam(newSecondTeam: String) {
-//        secondTeam.value = newSecondTeam
-//    }
-//
-//    fun updateSecondTeamLevel(newSecondTeamLevel: String) {
-//        secondTeamLevel.value = newSecondTeamLevel
-//    }
-//
-//    fun updateThirdTeam(newThirdTeam: String) {
-//        thirdTeam.value = newThirdTeam
-//    }
-//
-//    fun updateThirdTeamLevel(newThirdTeamLevel: String) {
-//        thirdTeamLevel.value = newThirdTeamLevel
-//    }
 
     fun updateTrainingPlaceAndTime(newTrainingPlaceAndTime: String) {
         trainingPlaceAndTime.value = newTrainingPlaceAndTime
     }
 
     fun onFinishClick(openAndPopUp: (String, String) -> Unit) {
-//        val teamsMap = mapOf(firstTeam.value to firstTeamLevel.value,
-//            secondTeam.value to secondTeamLevel.value,
-//            thirdTeam.value to thirdTeamLevel.value)
-//            .filterKeys { it.isNotBlank() }
-
         launchCatching {
             firestoreService.createClubProfile(
                 ClubAccount(
