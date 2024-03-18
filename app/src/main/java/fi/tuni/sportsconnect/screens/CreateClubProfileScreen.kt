@@ -43,12 +43,12 @@ fun CreateClubProfileScreen(
     val city = viewModel.city.collectAsState()
     val bio = viewModel.bio.collectAsState()
     val phoneNumber = viewModel.phoneNumber.collectAsState()
-    val firstTeam = viewModel.firstTeam.collectAsState()
-    val firstTeamLevel = viewModel.firstTeamLevel.collectAsState()
-    val secondTeam = viewModel.secondTeam.collectAsState()
-    val secondTeamLevel = viewModel.secondTeamLevel.collectAsState()
-    val thirdTeam = viewModel.thirdTeam.collectAsState()
-    val thirdTeamLevel = viewModel.thirdTeamLevel.collectAsState()
+//    val firstTeam = viewModel.firstTeam.collectAsState()
+//    val firstTeamLevel = viewModel.firstTeamLevel.collectAsState()
+//    val secondTeam = viewModel.secondTeam.collectAsState()
+//    val secondTeamLevel = viewModel.secondTeamLevel.collectAsState()
+//    val thirdTeam = viewModel.thirdTeam.collectAsState()
+//    val thirdTeamLevel = viewModel.thirdTeamLevel.collectAsState()
     val trainingPlaceAndTime = viewModel.trainingPlaceAndTime.collectAsState()
 
     Column(
@@ -138,141 +138,141 @@ fun CreateClubProfileScreen(
             onValueChange = { viewModel.updatePhoneNumber(it) },
             placeholder = { Text("Puhelinnumero") },
         )
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = firstTeam.value,
-                onValueChange = { viewModel.updateFirstTeam(it) },
-                placeholder = { Text("Edustusjoukkueen nimi") },
-            )
-
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = firstTeamLevel.value,
-                onValueChange = { viewModel.updateFirstTeamLevel(it) },
-                placeholder = { Text("Edustusjoukkueen sarjataso") },
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = secondTeam.value,
-                onValueChange = { viewModel.updateSecondTeam(it) },
-                placeholder = { Text("2. joukkueen nimi") },
-            )
-
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = secondTeamLevel.value,
-                onValueChange = { viewModel.updateSecondTeamLevel(it) },
-                placeholder = { Text("2. joukkueen sarjataso") },
-            )
-        }
-
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = thirdTeam.value,
-                onValueChange = { viewModel.updateThirdTeam(it) },
-                placeholder = { Text("3. joukkueen nimi") },
-            )
-
-            OutlinedTextField(
-                singleLine = true,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
-                    .border(
-                        BorderStroke(width = 2.dp, color = Purple200),
-                        shape = RoundedCornerShape(50)
-                    ),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                value = thirdTeamLevel.value,
-                onValueChange = { viewModel.updateThirdTeamLevel(it) },
-                placeholder = { Text("3. joukkueen sarjataso") },
-            )
-        }
+//
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//        ) {
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth(0.5f)
+//                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = firstTeam.value,
+//                onValueChange = { viewModel.updateFirstTeam(it) },
+//                placeholder = { Text("Edustusjoukkueen nimi") },
+//            )
+//
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = firstTeamLevel.value,
+//                onValueChange = { viewModel.updateFirstTeamLevel(it) },
+//                placeholder = { Text("Edustusjoukkueen sarjataso") },
+//            )
+//        }
+//
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//        ) {
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth(0.5f)
+//                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = secondTeam.value,
+//                onValueChange = { viewModel.updateSecondTeam(it) },
+//                placeholder = { Text("2. joukkueen nimi") },
+//            )
+//
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = secondTeamLevel.value,
+//                onValueChange = { viewModel.updateSecondTeamLevel(it) },
+//                placeholder = { Text("2. joukkueen sarjataso") },
+//            )
+//        }
+//
+//        Row(
+//            modifier = modifier
+//                .fillMaxWidth()
+//        ) {
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth(0.5f)
+//                    .padding(16.dp, 4.dp, 4.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = thirdTeam.value,
+//                onValueChange = { viewModel.updateThirdTeam(it) },
+//                placeholder = { Text("3. joukkueen nimi") },
+//            )
+//
+//            OutlinedTextField(
+//                singleLine = true,
+//                modifier = modifier
+//                    .fillMaxWidth()
+//                    .padding(4.dp, 4.dp, 16.dp, 4.dp)
+//                    .border(
+//                        BorderStroke(width = 2.dp, color = Purple200),
+//                        shape = RoundedCornerShape(50)
+//                    ),
+//                colors = TextFieldDefaults.colors(
+//                    focusedContainerColor = Color.Transparent,
+//                    unfocusedContainerColor = Color.Transparent,
+//                    focusedIndicatorColor = Color.Transparent,
+//                    unfocusedIndicatorColor = Color.Transparent
+//                ),
+//                value = thirdTeamLevel.value,
+//                onValueChange = { viewModel.updateThirdTeamLevel(it) },
+//                placeholder = { Text("3. joukkueen sarjataso") },
+//            )
+//        }
 
         OutlinedTextField(
             singleLine = true,

@@ -1,0 +1,169 @@
+package fi.tuni.sportsconnect.screens
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import fi.tuni.sportsconnect.ui.theme.Purple200
+import fi.tuni.sportsconnect.viewModels.EditClubProfileViewModel
+
+@Composable
+fun EditClubProfileScreen(
+    openAndPopUp: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: EditClubProfileViewModel = hiltViewModel()
+) {
+    val clubName = viewModel.clubName.collectAsState()
+    val city = viewModel.city.collectAsState()
+    val bio = viewModel.bio.collectAsState()
+    val phoneNumber = viewModel.phoneNumber.collectAsState()
+    val trainingPlaceAndTime = viewModel.trainingPlaceAndTime.collectAsState()
+
+    LaunchedEffect(Unit) {viewModel.initialize()}
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = clubName.value,
+            onValueChange = { viewModel.updateClubName(it) },
+            placeholder = { Text("Seuran nimi") },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = city.value,
+            onValueChange = { viewModel.updateCity(it) },
+            placeholder = { Text("Seuran kotipaikkakunta") },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = bio.value,
+            onValueChange = { viewModel.updateBio(it) },
+            placeholder = { Text("Lyhyt kuvaus seurasta") },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = phoneNumber.value,
+            onValueChange = { viewModel.updatePhoneNumber(it) },
+            placeholder = { Text("Puhelinnumero") },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = trainingPlaceAndTime.value,
+            onValueChange = { viewModel.updateTrainingPlaceAndTime(it) },
+            placeholder = { Text("Seuran harjoituspaikat ja ajat") },
+        )
+
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp))
+
+        Button(
+            onClick = { viewModel.onFinishClick(openAndPopUp) },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 0.dp)
+        ) {
+            Text(
+                text = "Tallenna muutokset",
+                fontSize = 16.sp,
+                modifier = modifier.padding(0.dp, 6.dp)
+            )
+        }
+    }
+}

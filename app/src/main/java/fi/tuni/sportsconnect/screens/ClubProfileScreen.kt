@@ -20,6 +20,7 @@ import fi.tuni.sportsconnect.viewModels.ClubProfileViewModel
 
 @Composable
 fun ClubProfileScreen(
+    openAndPopUp: (String, String) -> Unit,
     restartApp: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ClubProfileViewModel = hiltViewModel()
@@ -41,6 +42,9 @@ fun ClubProfileScreen(
             .padding(innerPaddingModifier)) {
             Text(text = "Seuran profiili")
             Text(text = clubAccount.value.clubName)
+            Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) }) {
+                Text(text = "Muokkaa profiilia")
+            }
             Button(onClick = { showSignOutDialog = true }) {
                 Text(text = "Kirjaudu ulos")
             }

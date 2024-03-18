@@ -1,6 +1,10 @@
 package fi.tuni.sportsconnect.viewModels
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
+import fi.tuni.sportsconnect.EDIT_CLUB_PROFILE_SCREEN
+import fi.tuni.sportsconnect.EDIT_PLAYER_PROFILE_SCREEN
+import fi.tuni.sportsconnect.PLAYER_PROFILE_SCREEN
 import fi.tuni.sportsconnect.SPLASH_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.FirestoreService
@@ -29,6 +33,10 @@ class PlayerProfileViewModel @Inject constructor(
                 if(user == null) restartApp(SPLASH_SCREEN)
             }
         }
+    }
+
+    fun onEditProfileClick(openAndPopUp: (String, String) -> Unit) {
+        openAndPopUp(EDIT_PLAYER_PROFILE_SCREEN, PLAYER_PROFILE_SCREEN)
     }
 
     fun onSignOutClick() {

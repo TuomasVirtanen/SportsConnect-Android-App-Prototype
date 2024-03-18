@@ -4,30 +4,37 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.CLUB_HOME_SCREEN
+import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
 import fi.tuni.sportsconnect.CREATE_CLUB_PROFILE
+import fi.tuni.sportsconnect.EDIT_CLUB_PROFILE_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.ClubAccount
 import fi.tuni.sportsconnect.model.FirestoreService
-import fi.tuni.sportsconnect.model.PlayerAccount
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateClubProfileViewModel @Inject constructor(
+class EditClubProfileViewModel @Inject constructor(
     private val accountService: AccountService,
     private val firestoreService: FirestoreService
-) : SportsConnectAppViewModel() {
+): SportsConnectAppViewModel() {
+    val club = MutableStateFlow(ClubAccount())
     val clubName = MutableStateFlow("")
     val city = MutableStateFlow("")
     val bio = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
-//    val firstTeam = MutableStateFlow("")
-//    val firstTeamLevel = MutableStateFlow("")
-//    val secondTeam = MutableStateFlow("")
-//    val secondTeamLevel = MutableStateFlow("")
-//    val thirdTeam = MutableStateFlow("")
-//    val thirdTeamLevel = MutableStateFlow("")
     val trainingPlaceAndTime = MutableStateFlow("")
+
+    fun initialize() {
+        launchCatching {
+            club.value = firestoreService.readClubProfile(accountService.currentUserId)!!
+            clubName.value = club.value.clubName
+            city.value = club.value.city
+            bio.value = club.value.bio.orEmpty()
+            phoneNumber.value = club.value.contactInfo?.get("phoneNumber").orEmpty()
+            trainingPlaceAndTime.value = club.value.trainingPlaceAndTime.orEmpty()
+        }
+    }
 
     fun updateClubName(newClubName: String) {
         clubName.value = newClubName
@@ -43,55 +50,26 @@ class CreateClubProfileViewModel @Inject constructor(
     fun updatePhoneNumber(newPhoneNumber: String) {
         phoneNumber.value = newPhoneNumber
     }
-//
-//    fun updateFirstTeam(newFirstTeam: String) {
-//        firstTeam.value = newFirstTeam
-//    }
-//
-//    fun updateFirstTeamLevel(newFirstTeamLevel: String) {
-//        firstTeamLevel.value = newFirstTeamLevel
-//    }
-//
-//    fun updateSecondTeam(newSecondTeam: String) {
-//        secondTeam.value = newSecondTeam
-//    }
-//
-//    fun updateSecondTeamLevel(newSecondTeamLevel: String) {
-//        secondTeamLevel.value = newSecondTeamLevel
-//    }
-//
-//    fun updateThirdTeam(newThirdTeam: String) {
-//        thirdTeam.value = newThirdTeam
-//    }
-//
-//    fun updateThirdTeamLevel(newThirdTeamLevel: String) {
-//        thirdTeamLevel.value = newThirdTeamLevel
-//    }
 
     fun updateTrainingPlaceAndTime(newTrainingPlaceAndTime: String) {
         trainingPlaceAndTime.value = newTrainingPlaceAndTime
     }
 
     fun onFinishClick(openAndPopUp: (String, String) -> Unit) {
-//        val teamsMap = mapOf(firstTeam.value to firstTeamLevel.value,
-//            secondTeam.value to secondTeamLevel.value,
-//            thirdTeam.value to thirdTeamLevel.value)
-//            .filterKeys { it.isNotBlank() }
 
         launchCatching {
             firestoreService.createClubProfile(
                 ClubAccount(
-                    accountService.currentUserId,
+                    club.value.id,
                     clubName.value,
                     city.value,
                     bio.value,
                     mapOf("email" to Firebase.auth.currentUser?.email.orEmpty(),
                         "phoneNumber" to phoneNumber.value),
-//                    teamsMap,
                     trainingPlaceAndTime.value
                 )
             )
-            openAndPopUp(CLUB_HOME_SCREEN, CREATE_CLUB_PROFILE)
+            openAndPopUp(CLUB_PROFILE_SCREEN, EDIT_CLUB_PROFILE_SCREEN)
         }
     }
 }

@@ -39,6 +39,8 @@ import fi.tuni.sportsconnect.screens.ClubProfileScreen
 import fi.tuni.sportsconnect.screens.ClubSignUpScreen
 import fi.tuni.sportsconnect.screens.CreateClubProfileScreen
 import fi.tuni.sportsconnect.screens.CreatePlayerProfileScreen
+import fi.tuni.sportsconnect.screens.EditClubProfileScreen
+import fi.tuni.sportsconnect.screens.EditPlayerProfileScreen
 import fi.tuni.sportsconnect.screens.PlayerHomeScreen
 import fi.tuni.sportsconnect.screens.PlayerProfileScreen
 import fi.tuni.sportsconnect.screens.SignInScreen
@@ -212,11 +214,25 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
     }
 
     composable(PLAYER_PROFILE_SCREEN) {
-        PlayerProfileScreen(restartApp = { route -> appState.clearAndNavigate(route) })
+        PlayerProfileScreen(
+            openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) },
+            restartApp = { route -> appState.clearAndNavigate(route) }
+        )
     }
 
     composable(CLUB_PROFILE_SCREEN) {
-        ClubProfileScreen(restartApp = { route -> appState.clearAndNavigate(route) })
+        ClubProfileScreen(
+            openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) },
+            restartApp = { route -> appState.clearAndNavigate(route) }
+        )
+    }
+
+    composable(EDIT_CLUB_PROFILE_SCREEN) {
+        EditClubProfileScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
+    }
+
+    composable(EDIT_PLAYER_PROFILE_SCREEN) {
+        EditPlayerProfileScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SIGN_IN_SCREEN) {

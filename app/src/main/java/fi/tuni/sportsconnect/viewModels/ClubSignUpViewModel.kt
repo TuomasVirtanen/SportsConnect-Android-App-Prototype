@@ -3,17 +3,13 @@ package fi.tuni.sportsconnect.viewModels
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.CLUB_SIGN_UP_SCREEN
 import fi.tuni.sportsconnect.CREATE_CLUB_PROFILE
-import fi.tuni.sportsconnect.CREATE_PLAYER_PROFILE
-import fi.tuni.sportsconnect.PLAYER_SIGN_UP_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
-import fi.tuni.sportsconnect.model.FirestoreService
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class ClubSignUpViewModel @Inject constructor(
-    private val accountService: AccountService,
-    private val firestoreService: FirestoreService
+    private val accountService: AccountService
 ) : SportsConnectAppViewModel() {
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
