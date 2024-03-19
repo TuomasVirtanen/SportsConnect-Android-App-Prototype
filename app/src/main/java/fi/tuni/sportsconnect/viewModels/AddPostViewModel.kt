@@ -49,7 +49,8 @@ class AddPostViewModel @Inject constructor(
                     positions = mutableListOf(position.value) ,
                     club = mutableMapOf(
                         "clubName" to clubAccount.value.clubName,
-                        "city" to clubAccount.value.city
+                        "city" to clubAccount.value.city,
+                        "leagueLevel" to clubAccount.value.leagueLevel
                     ),
                     created = Timestamp(Date())
                 )
