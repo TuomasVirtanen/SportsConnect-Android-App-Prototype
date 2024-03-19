@@ -13,3 +13,7 @@ const val PLAYER_PROFILE_SCREEN = "PlayerProfileScreen"
 const val CLUB_PROFILE_SCREEN = "ClubProfileScreen"
 const val EDIT_PLAYER_PROFILE_SCREEN = "EditPlayerProfileScreen"
 const val EDIT_CLUB_PROFILE_SCREEN = "EditClubProfileScreen"
+
+const val CLUB_ACCOUNT_ID = "clubAccountId"
+const val CLUB_DEFAULT_ID = "-1"
+const val CLUB_ACCOUNT_ID_ARG = "?$CLUB_ACCOUNT_ID={$CLUB_ACCOUNT_ID}"

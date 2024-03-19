@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import fi.tuni.sportsconnect.screens.AddPostScreen
 import fi.tuni.sportsconnect.screens.ClubHomeScreen
 import fi.tuni.sportsconnect.screens.ClubProfileScreen
@@ -210,33 +211,37 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
     }
 
     composable(ADD_POST_SCREEN) {
-        AddPostScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp)})
+        AddPostScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
 
     composable(PLAYER_PROFILE_SCREEN) {
         PlayerProfileScreen(
-            openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
     }
 
-    composable(CLUB_PROFILE_SCREEN) {
+    composable(
+        route = "$CLUB_PROFILE_SCREEN$CLUB_ACCOUNT_ID_ARG",
+        arguments = listOf(navArgument(CLUB_ACCOUNT_ID) { defaultValue = CLUB_DEFAULT_ID })
+    ) {
         ClubProfileScreen(
-            openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) },
+            clubId = it.arguments?.getString(CLUB_ACCOUNT_ID) ?: CLUB_DEFAULT_ID,
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
     }
 
     composable(EDIT_CLUB_PROFILE_SCREEN) {
-        EditClubProfileScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
+        EditClubProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(EDIT_PLAYER_PROFILE_SCREEN) {
-        EditPlayerProfileScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
+        EditPlayerProfileScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SIGN_IN_SCREEN) {
-        SignInScreen(openAndPopUp = { route, popUp, -> appState.navigateAndPopUp(route, popUp) })
+        SignInScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(PLAYER_SIGN_UP_SCREEN) {

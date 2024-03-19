@@ -48,6 +48,7 @@ class AddPostViewModel @Inject constructor(
                     text = text.value,
                     positions = mutableListOf(position.value) ,
                     club = mutableMapOf(
+                        "clubId" to clubAccount.value.id,
                         "clubName" to clubAccount.value.clubName,
                         "city" to clubAccount.value.city,
                         "leagueLevel" to clubAccount.value.leagueLevel

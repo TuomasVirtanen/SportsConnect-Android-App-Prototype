@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import fi.tuni.sportsconnect.model.FirestoreService
 
 @Stable
 class AppState(
@@ -12,11 +11,17 @@ class AppState(
 ) {
     val shouldShowBottomNavBar: Boolean
         @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination?.route in
-                listOf(PLAYER_HOME_SCREEN, CLUB_HOME_SCREEN, PLAYER_PROFILE_SCREEN, CLUB_PROFILE_SCREEN)
-    fun popUp() {
-        navController.popBackStack()
+                    .currentBackStackEntryAsState().value?.destination?.route?.startsWithAny(
+                    arrayOf(PLAYER_HOME_SCREEN, CLUB_HOME_SCREEN, PLAYER_PROFILE_SCREEN, CLUB_PROFILE_SCREEN)
+                    ) == true
+
+    private fun String?.startsWithAny(prefixes: Array<String>): Boolean {
+        return this != null && prefixes.any { this.startsWith(it) }
     }
+
+//    fun popUp() {
+//        navController.popBackStack()
+//    }
 
     fun navigate(route: String) {
         navController.navigate(route) { launchSingleTop = true }

@@ -47,7 +47,7 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun PlayerHomeScreen(
     restartApp: (String) -> Unit,
-//    openScreen: (String) -> Unit,
+    openScreen: (String) -> Unit,
     viewModel: PlayerHomeViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
@@ -62,7 +62,7 @@ fun PlayerHomeScreen(
                 items(posts, key = { it.id }) {postItem ->
                     PostItem(
                         post = postItem,
-                        onActionClick = {})
+                        onActionClick = { viewModel.onProfileClick(openScreen, postItem.club["clubId"]!!)})
                 }
             }
         }
@@ -82,7 +82,6 @@ fun PostItem(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onActionClick(post.id) }
         ) {
             Row(
                 modifier = Modifier
@@ -98,11 +97,13 @@ fun PostItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
+                        .clickable { onActionClick(post.club["clubId"]!!) }
                 )
                 Text(
                     text = post.club["clubName"].orEmpty(),
                     modifier = Modifier
-                        .padding(5.dp, 12.dp, 5.dp, 12.dp),
+                        .padding(5.dp, 12.dp, 5.dp, 12.dp)
+                        .clickable { onActionClick(post.club["clubId"]!!) },
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )

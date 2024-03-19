@@ -20,14 +20,15 @@ import fi.tuni.sportsconnect.viewModels.ClubProfileViewModel
 
 @Composable
 fun ClubProfileScreen(
+    clubId: String,
     openAndPopUp: (String, String) -> Unit,
     restartApp: (String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ClubProfileViewModel = hiltViewModel()
 ) {
     val clubAccount = viewModel.clubAccount.collectAsState()
+    val showActionButtons = viewModel.showActionButtons.collectAsState()
 
-    LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
+    LaunchedEffect(Unit) { viewModel.initialize(clubId, restartApp) }
 
     Scaffold {innerPaddingModifier ->
         var showSignOutDialog by remember {
@@ -42,16 +43,17 @@ fun ClubProfileScreen(
             .padding(innerPaddingModifier)) {
             Text(text = "Seuran profiili")
             Text(text = clubAccount.value.clubName)
-            Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) }) {
-                Text(text = "Muokkaa profiilia")
+            if (showActionButtons.value) {
+                Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) }) {
+                    Text(text = "Muokkaa profiilia")
+                }
+                Button(onClick = { showSignOutDialog = true }) {
+                    Text(text = "Kirjaudu ulos")
+                }
+                Button(onClick = { showDeleteAccountDialog = true }) {
+                    Text(text = "Poista tilisi")
+                }
             }
-            Button(onClick = { showSignOutDialog = true }) {
-                Text(text = "Kirjaudu ulos")
-            }
-            Button(onClick = { showDeleteAccountDialog = true }) {
-                Text(text = "Poista tilisi")
-            }
-
             if(showSignOutDialog) {
                 AlertDialog(
                     title = { Text(text = "Haluatko kirjautua ulos?")},

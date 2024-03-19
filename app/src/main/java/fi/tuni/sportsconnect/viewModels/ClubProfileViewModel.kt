@@ -7,7 +7,6 @@ import fi.tuni.sportsconnect.SPLASH_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.ClubAccount
 import fi.tuni.sportsconnect.model.FirestoreService
-import fi.tuni.sportsconnect.model.PlayerAccount
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -17,10 +16,13 @@ class ClubProfileViewModel @Inject constructor(
     private val firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
     val clubAccount = MutableStateFlow(ClubAccount())
+    val showActionButtons = MutableStateFlow(false)
 
-    fun initialize(restartApp: (String) -> Unit) {
+    fun initialize(clubId: String, restartApp: (String) -> Unit) {
         launchCatching {
-            clubAccount.value = firestoreService.readClubProfile(accountService.currentUserId) ?: ClubAccount()
+            clubAccount.value = firestoreService.readClubProfile(clubId) ?:
+                    firestoreService.readClubProfile(accountService.currentUserId)!!
+            showActionButtons.value = clubAccount.value == firestoreService.readClubProfile(accountService.currentUserId)
         }
 
         observeAuthState(restartApp)

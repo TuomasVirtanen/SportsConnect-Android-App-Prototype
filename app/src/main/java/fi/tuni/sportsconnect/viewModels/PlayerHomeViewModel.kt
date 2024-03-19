@@ -1,6 +1,8 @@
 package fi.tuni.sportsconnect.viewModels
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fi.tuni.sportsconnect.CLUB_ACCOUNT_ID
+import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
 import fi.tuni.sportsconnect.SPLASH_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.FirestoreService
@@ -29,5 +31,9 @@ class PlayerHomeViewModel @Inject constructor(
                 if(user == null) restartApp(SPLASH_SCREEN)
             }
         }
+    }
+
+    fun onProfileClick(openScreen: (String) -> Unit, clubId: String) {
+        openScreen("$CLUB_PROFILE_SCREEN?$CLUB_ACCOUNT_ID=${clubId}")
     }
 }
