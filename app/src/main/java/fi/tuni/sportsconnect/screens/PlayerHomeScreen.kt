@@ -6,30 +6,57 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,9 +67,11 @@ import fi.tuni.sportsconnect.model.Post
 import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.PlayerHomeViewModel
+import kotlinx.coroutines.launch
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun PlayerHomeScreen(
@@ -50,11 +79,32 @@ fun PlayerHomeScreen(
     openScreen: (String) -> Unit,
     viewModel: PlayerHomeViewModel = hiltViewModel()
 ) {
+    var openBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var showCities by remember {
+        mutableStateOf(false)
+    }
+    var showLevels by remember {
+        mutableStateOf(false)
+    }
+    var showPositions by remember {
+        mutableStateOf(false)
+    }
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    val filters by viewModel.filters.collectAsState()
+    val posts by viewModel.posts.collectAsState(emptyList())
+
     LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
 
-    Scaffold {
-        val posts by viewModel.posts.collectAsState(emptyList())
-
+    Column(modifier = Modifier
+        .fillMaxSize()) {
+        Row {
+            IconButton(onClick = { openBottomSheet = !openBottomSheet }) {
+                Icon(rememberFilterList(), "Filters")
+            }
+        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(0.dp, 12.dp, 0.dp, 0.dp)) {
@@ -67,8 +117,90 @@ fun PlayerHomeScreen(
             }
         }
     }
-}
+    // Sheet content
+    if (openBottomSheet) {
 
+        ModalBottomSheet(
+            onDismissRequest = { openBottomSheet = false },
+            sheetState = bottomSheetState,
+            modifier = Modifier.padding(0.dp, 10.dp),
+        ) {
+            Column {
+                LazyColumn(modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.85f),
+                ) {
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clickable { showCities = !showCities }
+                                .fillMaxWidth()
+                                .padding(20.dp, 20.dp, 20.dp, 10.dp)
+                        ) {
+                            Icon(Icons.Filled.ArrowDropDown, "City filters")
+                            Text(
+                                text = "Paikkakunnat",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                    if (showCities) cityFilterList()
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clickable { showPositions = !showPositions }
+                                .fillMaxWidth()
+                                .padding(20.dp, 20.dp, 20.dp, 10.dp)
+                        ) {
+                            Icon(Icons.Filled.ArrowDropDown, "Position filters")
+                            Text(
+                                text = "Pelipaikat",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                    if (showPositions) positionFilterList()
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clickable { showLevels = !showLevels }
+                                .fillMaxWidth()
+                                .padding(20.dp, 20.dp, 20.dp, 10.dp)
+                        ) {
+                            Icon(Icons.Filled.ArrowDropDown, "Level filters")
+                            Text(
+                                text = "Sarjatasot",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                    if (showLevels) levelFilterList()
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Button(
+                        onClick = {
+                            scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                                if (!bottomSheetState.isVisible) {
+                                    openBottomSheet = false
+                                }
+                            }
+                        }
+                    ) {
+                        Text("Suodata")
+                    }
+                }
+                Spacer(modifier = Modifier.padding(0.dp, 50.dp))
+            }
+        }
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -138,7 +270,7 @@ fun PostItem(
                             .border(
                                 border = BorderStroke(2.dp, color = Dark),
                                 shape = CircleShape,
-                                )
+                            )
                             .padding(5.dp)
 
                     )
@@ -150,7 +282,8 @@ fun PostItem(
                             .background(White)
                             .border(
                                 border = BorderStroke(2.dp, color = Dark),
-                                shape = CircleShape)
+                                shape = CircleShape
+                            )
                             .padding(5.dp)
                     )
                     post.positions.forEach{ post ->
@@ -162,7 +295,8 @@ fun PostItem(
                                 .background(White)
                                 .border(
                                     border = BorderStroke(2.dp, color = Dark),
-                                    shape = CircleShape)
+                                    shape = CircleShape
+                                )
                                 .padding(5.dp)
                         )
                     }
@@ -173,5 +307,133 @@ fun PostItem(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+    }
+}
+
+fun LazyListScope.cityFilterList() {
+    items(listOf("Tampere", "Helsinki", "Espoo", "Oulu", "Kuopio")) {
+        var test by remember {
+            mutableStateOf(false)
+        }
+        Row(
+            Modifier
+                .fillMaxSize()
+                .toggleable(
+                    value = test,
+                    role = Role.Checkbox,
+                    onValueChange = { checked -> test = checked }
+                )
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Spacer(Modifier.width(16.dp))
+            Text(it)
+        }
+    }
+}
+
+fun LazyListScope.positionFilterList() {
+    items(listOf("Maalivahti", "Puolustaja", "Hyökkääjä")) {
+        var test by remember {
+            mutableStateOf(false)
+        }
+        Row(
+            Modifier
+                .fillMaxSize()
+                .toggleable(
+                    value = test,
+                    role = Role.Checkbox,
+                    onValueChange = { checked -> test = checked }
+                )
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Spacer(Modifier.width(16.dp))
+            Text(it)
+        }
+    }
+}
+
+fun LazyListScope.levelFilterList() {
+    items(listOf("M 2. divisioona", "N 2. divisioona", "M 3. divisioona", "N 3. divisioona")) {
+        var test by remember {
+            mutableStateOf(false)
+        }
+        Row(
+            Modifier
+                .fillMaxSize()
+                .toggleable(
+                    value = test,
+                    role = Role.Checkbox,
+                    onValueChange = { checked -> test = checked }
+                )
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Spacer(Modifier.width(16.dp))
+            Text(it)
+        }
+    }
+}
+
+@Composable
+fun rememberFilterList(): ImageVector {
+    return remember {
+        ImageVector.Builder(
+            name = "filter_list",
+            defaultWidth = 40.0.dp,
+            defaultHeight = 40.0.dp,
+            viewportWidth = 40.0f,
+            viewportHeight = 40.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color.Black),
+                fillAlpha = 1f,
+                stroke = null,
+                strokeAlpha = 1f,
+                strokeLineWidth = 1.0f,
+                strokeLineCap = StrokeCap.Butt,
+                strokeLineJoin = StrokeJoin.Miter,
+                strokeLineMiter = 1f,
+                pathFillType = PathFillType.NonZero
+            ) {
+                moveTo(18.083f, 29.333f)
+                quadToRelative(-0.583f, 0f, -0.958f, -0.395f)
+                quadToRelative(-0.375f, -0.396f, -0.375f, -0.938f)
+                quadToRelative(0f, -0.542f, 0.375f, -0.938f)
+                quadToRelative(0.375f, -0.395f, 0.958f, -0.395f)
+                horizontalLineToRelative(3.834f)
+                quadToRelative(0.541f, 0f, 0.937f, 0.395f)
+                quadToRelative(0.396f, 0.396f, 0.396f, 0.938f)
+                quadToRelative(0f, 0.583f, -0.396f, 0.958f)
+                reflectiveQuadToRelative(-0.937f, 0.375f)
+                close()
+                moveTo(6.5f, 12.792f)
+                quadToRelative(-0.542f, 0f, -0.917f, -0.375f)
+                reflectiveQuadToRelative(-0.375f, -0.959f)
+                quadToRelative(0f, -0.541f, 0.375f, -0.937f)
+                reflectiveQuadToRelative(0.917f, -0.396f)
+                horizontalLineToRelative(26.958f)
+                quadToRelative(0.584f, 0f, 0.959f, 0.396f)
+                reflectiveQuadToRelative(0.375f, 0.937f)
+                quadToRelative(0f, 0.584f, -0.375f, 0.959f)
+                reflectiveQuadToRelative(-0.959f, 0.375f)
+                close()
+                moveToRelative(4.958f, 8.25f)
+                quadToRelative(-0.541f, 0f, -0.937f, -0.375f)
+                reflectiveQuadToRelative(-0.396f, -0.959f)
+                quadToRelative(0f, -0.541f, 0.396f, -0.916f)
+                reflectiveQuadToRelative(0.937f, -0.375f)
+                horizontalLineToRelative(17.084f)
+                quadToRelative(0.541f, 0f, 0.916f, 0.395f)
+                quadToRelative(0.375f, 0.396f, 0.375f, 0.938f)
+                quadToRelative(0f, 0.542f, -0.375f, 0.917f)
+                reflectiveQuadToRelative(-0.916f, 0.375f)
+                close()
+            }
+        }.build()
     }
 }

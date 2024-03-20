@@ -6,6 +6,7 @@ import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
 import fi.tuni.sportsconnect.SPLASH_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.FirestoreService
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -14,12 +15,25 @@ class PlayerHomeViewModel @Inject constructor(
     private val accountService: AccountService,
     firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
+    val filters = MutableStateFlow(mutableMapOf<String, MutableList<String>>(
+        Pair("positions", mutableListOf()),
+        Pair("cities", mutableListOf()),
+        Pair("levels", mutableListOf())
+    ))
     val posts = firestoreService.posts.map { posts ->
-        posts.sortedByDescending { it.created }
+        posts.filter {
+            (filters.value["positions"]?.isEmpty() ?: true &&
+            filters.value["cities"]?.isEmpty() ?: true &&
+            filters.value["levels"]?.isEmpty() ?: true) ||
+                    (filters.value["positions"]?.any { position -> it.positions.contains(position) } ?: true ||
+                    filters.value["cities"]?.any { city -> it.club[city] == city } ?: true ||
+                    filters.value["levels"]?.any { level -> it.club[level] == level } ?: true)
+        }.sortedByDescending { it.created }
     }
+
     fun initialize(restartApp: (String) -> Unit) {
         launchCatching {
-            // TODO: kun tehdään filteröinti, posts.value = ...
+            // TODO: kun tehdään filteröinti, filters.value = ...
         }
 
         observeAuthState(restartApp)
