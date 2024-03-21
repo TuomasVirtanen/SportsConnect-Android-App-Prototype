@@ -1,5 +1,6 @@
 package fi.tuni.sportsconnect.viewModels
 
+import android.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.CLUB_ACCOUNT_ID
 import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
@@ -16,8 +17,8 @@ class PlayerHomeViewModel @Inject constructor(
     firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
     val filters = MutableStateFlow(mutableMapOf<String, MutableList<String>>(
-        Pair("positions", mutableListOf()),
         Pair("cities", mutableListOf()),
+        Pair("positions", mutableListOf()),
         Pair("levels", mutableListOf())
     ))
     val posts = firestoreService.posts.map { posts ->
@@ -45,6 +46,38 @@ class PlayerHomeViewModel @Inject constructor(
                 if(user == null) restartApp(SPLASH_SCREEN)
             }
         }
+    }
+
+    fun onCityFilterChange(filter: String) {
+        if (filters.value["cities"]?.any { city -> filter == city } == false) {
+            filters.value["cities"]?.add(filter)
+        } else {
+            filters.value["cities"]?.remove(filter)
+        }
+    }
+
+    fun onPositionFilterChange(filter: String) {
+        if (filters.value["positions"]?.any { pos -> filter == pos } == false) {
+            filters.value["positions"]?.add(filter)
+        } else {
+            filters.value["positions"]?.remove(filter)
+        }
+    }
+
+    fun onLevelFilterChange(filter: String) {
+        if (filters.value["levels"]?.any { level -> filter == level } == false) {
+            filters.value["levels"]?.add(filter)
+        } else {
+            filters.value["levels"]?.remove(filter)
+        }
+    }
+
+    fun clearFilters() {
+        filters.value = mutableMapOf(
+            Pair("positions", mutableListOf()),
+            Pair("cities", mutableListOf()),
+            Pair("levels", mutableListOf())
+        )
     }
 
     fun onProfileClick(openScreen: (String) -> Unit, clubId: String) {

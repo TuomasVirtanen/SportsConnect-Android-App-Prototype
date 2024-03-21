@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -80,13 +82,13 @@ fun PlayerHomeScreen(
     viewModel: PlayerHomeViewModel = hiltViewModel()
 ) {
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var showCities by remember {
+    var showCities by rememberSaveable {
         mutableStateOf(false)
     }
-    var showLevels by remember {
+    var showLevels by rememberSaveable {
         mutableStateOf(false)
     }
-    var showPositions by remember {
+    var showPositions by rememberSaveable {
         mutableStateOf(false)
     }
     val scope = rememberCoroutineScope()
@@ -95,16 +97,38 @@ fun PlayerHomeScreen(
     )
     val filters by viewModel.filters.collectAsState()
     val posts by viewModel.posts.collectAsState(emptyList())
+    val updateCityFilters: (String) -> Unit = { filter -> viewModel.onCityFilterChange(filter) }
+    val updatePositionFilters: (String) -> Unit = { filter -> viewModel.onPositionFilterChange(filter) }
+    val updateLevelFilters: (String) -> Unit = { filter -> viewModel.onLevelFilterChange(filter) }
 
     LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
 
     Column(modifier = Modifier
         .fillMaxSize()) {
-        Row {
-            IconButton(onClick = { openBottomSheet = !openBottomSheet }) {
-                Icon(rememberFilterList(), "Filters")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.horizontalScroll(rememberScrollState())
+        ) {
+                IconButton(onClick = { openBottomSheet = !openBottomSheet }) {
+                    Icon(rememberFilterList(), "Filters")
+                }
+                filters.forEach{ filterList ->
+                    filterList.value.forEach {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .clip(CircleShape)
+                                .background(White)
+                                .border(
+                                    border = BorderStroke(2.dp, color = Dark),
+                                    shape = CircleShape
+                                )
+                                .padding(5.dp)
+                        )
+                    }
+                }
             }
-        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(0.dp, 12.dp, 0.dp, 0.dp)) {
@@ -145,7 +169,9 @@ fun PlayerHomeScreen(
                             )
                         }
                     }
-                    if (showCities) cityFilterList()
+                    if (showCities) cityFilterList(
+                        onFilterClick = updateCityFilters,
+                        filters = filters["cities"] ?: mutableListOf())
                     item {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -161,7 +187,10 @@ fun PlayerHomeScreen(
                             )
                         }
                     }
-                    if (showPositions) positionFilterList()
+                    if (showPositions) positionFilterList(
+                        onFilterClick = updatePositionFilters,
+                        filters = filters["positions"] ?: mutableListOf()
+                    )
                     item {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -177,7 +206,10 @@ fun PlayerHomeScreen(
                             )
                         }
                     }
-                    if (showLevels) levelFilterList()
+                    if (showLevels) levelFilterList(
+                        onFilterClick = updateLevelFilters,
+                        filters = filters["levels"] ?: mutableListOf()
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -194,6 +226,14 @@ fun PlayerHomeScreen(
                         }
                     ) {
                         Text("Suodata")
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.clearFilters()
+                        }
+                    ) {
+                        Text("Poista suodattimet")
                     }
                 }
                 Spacer(modifier = Modifier.padding(0.dp, 50.dp))
@@ -310,71 +350,98 @@ fun PostItem(
     }
 }
 
-fun LazyListScope.cityFilterList() {
-    items(listOf("Tampere", "Helsinki", "Espoo", "Oulu", "Kuopio")) {
-        var test by remember {
-            mutableStateOf(false)
+fun LazyListScope.cityFilterList(onFilterClick: (String) -> Unit, filters: MutableList<String>) {
+    items(listOf("Tampere", "Helsinki", "Espoo", "Oulu", "Kuopio")) {item ->
+        var filterChecked by remember {
+            mutableStateOf( filters.any { city -> item == city })
         }
+
+        if (filters.isEmpty()) {
+            filterChecked = false
+        }
+
         Row(
             Modifier
                 .fillMaxSize()
                 .toggleable(
-                    value = test,
+                    value = filterChecked,
                     role = Role.Checkbox,
-                    onValueChange = { checked -> test = checked }
+                    onValueChange = {
+                        onFilterClick(item)
+                        filterChecked = it
+                    }
                 )
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Checkbox(
+                checked = filterChecked,
+                onCheckedChange = null,
+                modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
             Spacer(Modifier.width(16.dp))
-            Text(it)
+            Text(item)
         }
     }
 }
 
-fun LazyListScope.positionFilterList() {
-    items(listOf("Maalivahti", "Puolustaja", "Hyökkääjä")) {
-        var test by remember {
-            mutableStateOf(false)
+fun LazyListScope.positionFilterList(onFilterClick: (String) -> Unit, filters: MutableList<String>) {
+    items(listOf("Maalivahti", "Puolustaja", "Hyökkääjä")) {item ->
+        var filterChecked by remember {
+            mutableStateOf( filters.any { position -> item == position })
         }
+
+        if (filters.isEmpty()) {
+            filterChecked = false
+        }
+
         Row(
             Modifier
                 .fillMaxSize()
                 .toggleable(
-                    value = test,
+                    value = filterChecked,
                     role = Role.Checkbox,
-                    onValueChange = { checked -> test = checked }
+                    onValueChange = {
+                        onFilterClick(item)
+                        filterChecked = it
+                    }
                 )
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Checkbox(checked = filterChecked, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
             Spacer(Modifier.width(16.dp))
-            Text(it)
+            Text(item)
         }
     }
 }
 
-fun LazyListScope.levelFilterList() {
-    items(listOf("M 2. divisioona", "N 2. divisioona", "M 3. divisioona", "N 3. divisioona")) {
-        var test by remember {
-            mutableStateOf(false)
+fun LazyListScope.levelFilterList(onFilterClick: (String) -> Unit, filters: MutableList<String>) {
+    items(listOf("M 2. divisioona", "N 2. divisioona", "M 3. divisioona", "N 3. divisioona")) {item ->
+        var filterChecked by remember {
+            mutableStateOf( filters.any { level -> item == level })
         }
+
+        if (filters.isEmpty()) {
+            filterChecked = false
+        }
+
         Row(
             Modifier
                 .fillMaxSize()
                 .toggleable(
-                    value = test,
+                    value = filterChecked,
                     role = Role.Checkbox,
-                    onValueChange = { checked -> test = checked }
+                    onValueChange = {
+                        onFilterClick(item)
+                        filterChecked = it
+                    }
                 )
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(checked = test, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+            Checkbox(checked = filterChecked, onCheckedChange = null, modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
             Spacer(Modifier.width(16.dp))
-            Text(it)
+            Text(item)
         }
     }
 }
