@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -73,7 +72,6 @@ import fi.tuni.sportsconnect.model.Post
 import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.PlayerHomeViewModel
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -144,8 +142,8 @@ fun PlayerHomeScreen(
             LazyColumn {
                 items(posts, key = { it.id }) {postItem ->
                     PostItem(
-                        post = postItem,
-                        onActionClick = { viewModel.onProfileClick(openScreen, postItem.club["clubId"]!!)})
+                        post = postItem
+                    ) { viewModel.onProfileClick(openScreen, postItem.club["clubId"]!!) }
                 }
             }
         }
@@ -260,7 +258,7 @@ fun PlayerHomeScreen(
 @Composable
 fun PostItem(
     post: Post,
-    onActionClick: (String) -> Unit
+    onActionClick: ((String) -> Unit)?
 ) {
     Card(
         modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 8.dp)
@@ -283,13 +281,22 @@ fun PostItem(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .clickable { onActionClick(post.club["clubId"]!!) }
+                        .clickable(enabled = onActionClick != null) {
+                            if (onActionClick != null) {
+                                onActionClick(post.club["clubId"]!!)
+                            }
+                        }
                 )
                 Text(
                     text = post.club["clubName"].orEmpty(),
                     modifier = Modifier
                         .padding(5.dp, 12.dp, 5.dp, 12.dp)
-                        .clickable { onActionClick(post.club["clubId"]!!) },
+                        .clickable(enabled = onActionClick != null) {
+                            if (onActionClick != null) {
+                                onActionClick(post.club["clubId"]!!)
+                            }
+
+                        },
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )

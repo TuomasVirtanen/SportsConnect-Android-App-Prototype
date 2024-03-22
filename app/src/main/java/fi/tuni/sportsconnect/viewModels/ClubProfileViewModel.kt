@@ -1,5 +1,6 @@
 package fi.tuni.sportsconnect.viewModels
 
+import android.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fi.tuni.sportsconnect.CLUB_PROFILE_SCREEN
 import fi.tuni.sportsconnect.EDIT_CLUB_PROFILE_SCREEN
@@ -7,7 +8,10 @@ import fi.tuni.sportsconnect.SPLASH_SCREEN
 import fi.tuni.sportsconnect.model.AccountService
 import fi.tuni.sportsconnect.model.ClubAccount
 import fi.tuni.sportsconnect.model.FirestoreService
+import fi.tuni.sportsconnect.model.Post
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,12 +21,23 @@ class ClubProfileViewModel @Inject constructor(
 ): SportsConnectAppViewModel() {
     val clubAccount = MutableStateFlow(ClubAccount())
     val showActionButtons = MutableStateFlow(false)
+    val clubPosts = MutableStateFlow<List<Post>>(emptyList())
+
 
     fun initialize(clubId: String, restartApp: (String) -> Unit) {
         launchCatching {
-            clubAccount.value = firestoreService.readClubProfile(clubId) ?:
-                    firestoreService.readClubProfile(accountService.currentUserId)!!
-            showActionButtons.value = clubAccount.value == firestoreService.readClubProfile(accountService.currentUserId)
+            clubAccount.value =
+                firestoreService.readClubProfile(clubId) ?: firestoreService.readClubProfile(
+                    accountService.currentUserId
+                )!!
+            showActionButtons.value =
+                clubAccount.value == firestoreService.readClubProfile(accountService.currentUserId)
+            firestoreService.posts.collect { posts ->
+                clubPosts.value = posts.filter {
+                    Log.d("haluun nukkuun", (it.club["clubId"] == clubAccount.value.id).toString())
+                    it.club["clubId"] == clubAccount.value.id
+                }.sortedByDescending { it.created }
+            }
         }
 
         observeAuthState(restartApp)

@@ -50,7 +50,6 @@ import fi.tuni.sportsconnect.viewModels.PlayerProfileViewModel
 fun PlayerProfileScreen(
     openAndPopUp: (String, String) -> Unit,
     restartApp: (String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: PlayerProfileViewModel = hiltViewModel()
 ) {
     val playerAccount = viewModel.playerAccount.collectAsState()
@@ -109,18 +108,18 @@ fun PlayerProfileScreen(
                                     )
                                     .padding(5.dp)
                             )
-                        } else {
-                            Text(
-                                text = playerAccount.value.currentTeam.orEmpty(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier
-                                    .padding(5.dp)
-                            )
                         }
                     }
                 }
             }
             item {
+                Text(
+                    text = playerAccount.value.currentTeam.orEmpty(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
                 Text(
                     text = playerAccount.value.bio.orEmpty(),
                     style = MaterialTheme.typography.bodyLarge,
