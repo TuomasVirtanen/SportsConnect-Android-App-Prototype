@@ -69,6 +69,7 @@ import fi.tuni.sportsconnect.model.Post
 import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.PlayerHomeViewModel
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -96,7 +97,7 @@ fun PlayerHomeScreen(
         skipPartiallyExpanded = true
     )
     val filters by viewModel.filters.collectAsState()
-    val posts by viewModel.posts.collectAsState(emptyList())
+    val posts by viewModel.filteredPosts.collectAsState(emptyList())
     val updateCityFilters: (String) -> Unit = { filter -> viewModel.onCityFilterChange(filter) }
     val updatePositionFilters: (String) -> Unit = { filter -> viewModel.onPositionFilterChange(filter) }
     val updateLevelFilters: (String) -> Unit = { filter -> viewModel.onLevelFilterChange(filter) }
@@ -145,7 +146,10 @@ fun PlayerHomeScreen(
     if (openBottomSheet) {
 
         ModalBottomSheet(
-            onDismissRequest = { openBottomSheet = false },
+            onDismissRequest = {
+                openBottomSheet = false
+                viewModel.updatePosts()
+            },
             sheetState = bottomSheetState,
             modifier = Modifier.padding(0.dp, 10.dp),
         ) {
@@ -214,7 +218,7 @@ fun PlayerHomeScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceAround,
                 ) {
                     Button(
                         onClick = {
@@ -223,6 +227,7 @@ fun PlayerHomeScreen(
                                     openBottomSheet = false
                                 }
                             }
+                            viewModel.updatePosts()
                         }
                     ) {
                         Text("Suodata")
