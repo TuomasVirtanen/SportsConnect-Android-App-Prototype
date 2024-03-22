@@ -52,18 +52,6 @@ class PlayerHomeViewModel @Inject constructor(
 
     fun initialize(restartApp: (String) -> Unit) {
         launchCatching {
-            val user = firestoreService.readPlayerProfile(accountService.currentUserId)
-
-            user?.cities?.forEach {
-                filters.value["cities"]?.add(it)
-            }
-            user?.positions?.forEach {
-                filters.value["positions"]?.add(it)
-            }
-            user?.leagueLevels?.forEach {
-                filters.value["levels"]?.add(it)
-            }
-
             updatePosts()
         }
 
