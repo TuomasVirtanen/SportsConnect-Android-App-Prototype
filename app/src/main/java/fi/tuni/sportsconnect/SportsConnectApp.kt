@@ -6,9 +6,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -44,6 +46,7 @@ import fi.tuni.sportsconnect.screens.EditClubProfileScreen
 import fi.tuni.sportsconnect.screens.EditPlayerProfileScreen
 import fi.tuni.sportsconnect.screens.PlayerHomeScreen
 import fi.tuni.sportsconnect.screens.PlayerProfileScreen
+import fi.tuni.sportsconnect.screens.PlayerSearchScreen
 import fi.tuni.sportsconnect.screens.SignInScreen
 import fi.tuni.sportsconnect.screens.SignUpScreen
 import fi.tuni.sportsconnect.screens.SplashScreen
@@ -64,6 +67,13 @@ fun SportsConnectApp(
                 unselectedIcon = Icons.Outlined.Home,
                 hasNews = false,
                 route = PLAYER_HOME_SCREEN,
+            ),
+            BottomNavItem(
+                title = "Haku",
+                selectedIcon = Icons.Filled.Search,
+                unselectedIcon = Icons.Outlined.Search,
+                hasNews = false,
+                route = PLAYER_SEARCH_SCREEN,
             ),
             BottomNavItem(
                 title = "Profiili",
@@ -262,6 +272,10 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
 
     composable(SPLASH_SCREEN) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+    }
+
+    composable(PLAYER_SEARCH_SCREEN) {
+        PlayerSearchScreen()
     }
 }
 

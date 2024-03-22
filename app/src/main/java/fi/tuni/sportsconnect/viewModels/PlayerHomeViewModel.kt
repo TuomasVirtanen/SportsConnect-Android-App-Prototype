@@ -21,8 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerHomeViewModel @Inject constructor(
-    private val accountService: AccountService,
-    private val firestoreService: FirestoreService
+    private val accountService: AccountService, private val firestoreService: FirestoreService
 ) : SportsConnectAppViewModel() {
     val filters = MutableStateFlow(
         mutableMapOf<String, MutableList<String>>(
@@ -37,17 +36,14 @@ class PlayerHomeViewModel @Inject constructor(
         launchCatching {
             firestoreService.posts.collect { posts ->
                 filteredPosts.value = posts.filter {
-                    (
-                            ((filters.value["positions"]?.isEmpty() ?: true ||
-                                    filters.value["positions"]?.any { position ->
-                                        it.positions.contains(
-                                            position
-                                        )
-                                    } ?: true) &&
-                                    (filters.value["cities"]?.isEmpty() ?: true ||
-                                            filters.value["cities"]?.any { city -> it.club["city"] == city } ?: true) &&
-                                    (filters.value["levels"]?.isEmpty() ?: true) ||
-                                    filters.value["levels"]?.any { level -> it.club["level"] == level } ?: true))
+                    (filters.value["positions"]?.isEmpty() ?: true || filters.value["positions"]?.any { position ->
+                        it.positions.contains(position)
+                    } ?: true) &&
+                    (filters.value["cities"]?.isEmpty() ?: true || filters.value["cities"]?.any { city ->
+                        it.club["city"] == city
+                    } ?: true) &&
+                    (filters.value["levels"]?.isEmpty()
+                        ?: true) || filters.value["levels"]?.any { level -> it.club["level"] == level } ?: true
                 }.sortedByDescending { it.created }
                 Log.d("posts", filteredPosts.toString())
             }
@@ -56,7 +52,18 @@ class PlayerHomeViewModel @Inject constructor(
 
     fun initialize(restartApp: (String) -> Unit) {
         launchCatching {
-            // TODO: kun tehdään filteröinti, filters.value = ...
+            val user = firestoreService.readPlayerProfile(accountService.currentUserId)
+
+            user?.cities?.forEach {
+                filters.value["cities"]?.add(it)
+            }
+            user?.positions?.forEach {
+                filters.value["positions"]?.add(it)
+            }
+            user?.leagueLevels?.forEach {
+                filters.value["levels"]?.add(it)
+            }
+
             updatePosts()
         }
 

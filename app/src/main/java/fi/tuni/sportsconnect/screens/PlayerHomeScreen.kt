@@ -1,6 +1,7 @@
 package fi.tuni.sportsconnect.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -102,7 +104,9 @@ fun PlayerHomeScreen(
     val updatePositionFilters: (String) -> Unit = { filter -> viewModel.onPositionFilterChange(filter) }
     val updateLevelFilters: (String) -> Unit = { filter -> viewModel.onLevelFilterChange(filter) }
 
-    LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
+    LaunchedEffect(Unit) {
+        viewModel.initialize(restartApp)
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()) {
@@ -114,6 +118,7 @@ fun PlayerHomeScreen(
                     Icon(rememberFilterList(), "Filters")
                 }
                 filters.forEach{ filterList ->
+                    Log.d("filterit home screenissä", "filtterit päivitetty")
                     filterList.value.forEach {
                         Text(
                             text = it,

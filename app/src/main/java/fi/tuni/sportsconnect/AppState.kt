@@ -12,7 +12,7 @@ class AppState(
     val shouldShowBottomNavBar: Boolean
         @Composable get() = navController
                     .currentBackStackEntryAsState().value?.destination?.route?.startsWithAny(
-                    arrayOf(PLAYER_HOME_SCREEN, CLUB_HOME_SCREEN, PLAYER_PROFILE_SCREEN, CLUB_PROFILE_SCREEN)
+                    arrayOf(PLAYER_HOME_SCREEN, CLUB_HOME_SCREEN, PLAYER_PROFILE_SCREEN, CLUB_PROFILE_SCREEN, PLAYER_SEARCH_SCREEN)
                     ) == true
 
     private fun String?.startsWithAny(prefixes: Array<String>): Boolean {
