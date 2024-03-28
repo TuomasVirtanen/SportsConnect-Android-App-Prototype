@@ -23,6 +23,7 @@ class CreateClubProfileViewModel @Inject constructor(
     val phoneNumber = MutableStateFlow("")
     val trainingPlaceAndTime = MutableStateFlow("")
     val expandedLevel = MutableStateFlow(false)
+    val payment = MutableStateFlow("")
 
     fun updateClubName(newClubName: String) {
         clubName.value = newClubName
@@ -51,6 +52,10 @@ class CreateClubProfileViewModel @Inject constructor(
         trainingPlaceAndTime.value = newTrainingPlaceAndTime
     }
 
+    fun updatePayment(newPayment: String) {
+        payment.value = newPayment
+    }
+
     fun onFinishClick(openAndPopUp: (String, String) -> Unit) {
         launchCatching {
             firestoreService.createClubProfile(
@@ -61,8 +66,9 @@ class CreateClubProfileViewModel @Inject constructor(
                     bio.value,
                     mapOf("email" to Firebase.auth.currentUser?.email.orEmpty(),
                         "phoneNumber" to phoneNumber.value),
-//                    teamsMap,
-                    trainingPlaceAndTime.value
+                    leagueLevel.value,
+                    trainingPlaceAndTime.value,
+                    payment.value
                 )
             )
             openAndPopUp(CLUB_HOME_SCREEN, CREATE_CLUB_PROFILE)

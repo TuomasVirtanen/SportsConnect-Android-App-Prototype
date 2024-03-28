@@ -10,4 +10,5 @@ data class ClubAccount(
     val contactInfo: Map<String, String>? = null,
     val leagueLevel: String = "",
     val trainingPlaceAndTime: String? = null,
+    val payment: String? = null,
 )

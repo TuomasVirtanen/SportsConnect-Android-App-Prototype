@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.ui.theme.Dark
+import fi.tuni.sportsconnect.ui.theme.Purple200
 import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.viewModels.CreateClubProfileViewModel
 
@@ -48,6 +49,7 @@ fun CreateClubProfileScreen(
     val leagueLevel = viewModel.leagueLevel.collectAsState()
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val trainingPlaceAndTime = viewModel.trainingPlaceAndTime.collectAsState()
+    val payment = viewModel.payment.collectAsState()
     val expandedLevel = viewModel.expandedLevel.collectAsState()
 
     val levelOptions = listOf("F-liiga M", "F-liiga N", "M Inssi-Divari", "N Divari", "M Suomisarja",
@@ -192,6 +194,26 @@ fun CreateClubProfileScreen(
             value = trainingPlaceAndTime.value,
             onValueChange = { viewModel.updateTrainingPlaceAndTime(it) },
             placeholder = { Text(stringResource(R.string.training_place)) },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Purple200),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = payment.value,
+            onValueChange = { viewModel.updatePayment(it) },
+            placeholder = { Text("Kausimaksu") },
         )
 
         Spacer(modifier = Modifier
