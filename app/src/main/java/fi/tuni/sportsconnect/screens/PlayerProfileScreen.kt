@@ -269,49 +269,43 @@ fun PlayerProfileScreen(
                     )
                 }
             }
-
-            if (showSignOutDialog) {
-                item {
-                    AlertDialog(
-                        title = { Text(text = "Haluatko kirjautua ulos?") },
-                        dismissButton = {
-                            Button(onClick = { showSignOutDialog = false }) {
-                                Text(text = "Peru")
-                            }
-                        },
-                        onDismissRequest = { showSignOutDialog = false },
-                        confirmButton = {
-                            Button(onClick = {
-                                viewModel.onSignOutClick()
-                                showSignOutDialog = false
-                            }) {
-                                Text(text = "Kirjaudu ulos")
-                            }
-                        })
-                }
-            }
-
-            if (showDeleteAccountDialog) {
-                item {
-                    AlertDialog(
-                        title = { Text(text = "Haluatko poistaa tilisi?") },
-                        text = { Text(text = "Menetät kaikki tietosi ja tilisi poistetaan lopullisesti. Et voi perua toimintoa!") },
-                        dismissButton = {
-                            Button(onClick = { showDeleteAccountDialog = false }) {
-                                Text(text = "Peru")
-                            }
-                        },
-                        onDismissRequest = { showDeleteAccountDialog = false },
-                        confirmButton = {
-                            Button(onClick = {
-                                viewModel.onDeleteAccountClick()
-                                showDeleteAccountDialog = false
-                            }) {
-                                Text(text = "Poista tilisi")
-                            }
-                        })
-                }
-            }
+        }
+        if (showSignOutDialog) {
+                AlertDialog(
+                    title = { Text(text = "Haluatko kirjautua ulos?") },
+                    dismissButton = {
+                        Button(onClick = { showSignOutDialog = false }) {
+                            Text(text = "Peru")
+                        }
+                    },
+                    onDismissRequest = { showSignOutDialog = false },
+                    confirmButton = {
+                        Button(onClick = {
+                            viewModel.onSignOutClick()
+                            showSignOutDialog = false
+                        }) {
+                            Text(text = "Kirjaudu ulos")
+                        }
+                    })
+        }
+        if (showDeleteAccountDialog) {
+                AlertDialog(
+                    title = { Text(text = "Haluatko poistaa tilisi?") },
+                    text = { Text(text = "Menetät kaikki tietosi ja tilisi poistetaan lopullisesti. Et voi perua toimintoa!") },
+                    dismissButton = {
+                        Button(onClick = { showDeleteAccountDialog = false }) {
+                            Text(text = "Peru")
+                        }
+                    },
+                    onDismissRequest = { showDeleteAccountDialog = false },
+                    confirmButton = {
+                        Button(onClick = {
+                            viewModel.onDeleteAccountClick()
+                            showDeleteAccountDialog = false
+                        }) {
+                            Text(text = "Poista tilisi")
+                        }
+                    })
         }
     }
 }

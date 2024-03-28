@@ -18,29 +18,36 @@ class EditPlayerProfileViewModel @Inject constructor(
     private val accountService: AccountService,
     private val firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
-    val player = MutableStateFlow(PlayerAccount())
+    private val player = MutableStateFlow(PlayerAccount())
     val firstName = MutableStateFlow("")
     val lastName = MutableStateFlow("")
+    val age = MutableStateFlow("")
     val bio = MutableStateFlow("")
     val career = MutableStateFlow("")
     val city = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
     val currentTeam = MutableStateFlow("")
+    val shoot = MutableStateFlow("")
     val position = MutableStateFlow("")
     val leagueLevel = MutableStateFlow("")
     val searchingForTeam: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val strengths = MutableStateFlow("")
+    val expandedLevel = MutableStateFlow(false)
+    val expandedPos = MutableStateFlow(false)
+    val expandedShoot = MutableStateFlow(false)
 
     fun initialize() {
         launchCatching {
             player.value = firestoreService.readPlayerProfile(accountService.currentUserId)!!
             firstName.value = player.value.firstName
             lastName.value = player.value.lastName
+            age.value = player.value.age
             bio.value = player.value.bio.orEmpty()
             career.value = player.value.career.orEmpty()
             city.value = player.value.cities?.get(0).orEmpty()
             phoneNumber.value = player.value.contactInfo?.get("phoneNumber").orEmpty()
             currentTeam.value = player.value.currentTeam.orEmpty()
+            shoot.value = player.value.shoot.orEmpty()
             position.value = player.value.positions?.get(0).orEmpty()
             leagueLevel.value = player.value.leagueLevels?.get(0).orEmpty()
             searchingForTeam.value = player.value.searchingForTeam!!
@@ -54,6 +61,10 @@ class EditPlayerProfileViewModel @Inject constructor(
 
     fun updateLastName(newLastName: String) {
         lastName.value = newLastName
+    }
+
+    fun updateAge(newAge: String) {
+        age.value = newAge
     }
 
     fun updateBio(newBio: String) {
@@ -76,12 +87,28 @@ class EditPlayerProfileViewModel @Inject constructor(
         currentTeam.value = newCurrentTeam
     }
 
+    fun updateShoot(newShoot: String) {
+        shoot.value = newShoot
+    }
+
+    fun updateExpandedShoot() {
+        expandedShoot.value = !expandedShoot.value
+    }
+
     fun updatePosition(newPosition: String) {
         position.value = newPosition
     }
 
+    fun updateExpandedPos() {
+        expandedPos.value = !expandedPos.value
+    }
+
     fun updateLeagueLevel(newLevel: String) {
         leagueLevel.value = newLevel
+    }
+
+    fun updateExpandedLevel() {
+        expandedLevel.value = !expandedLevel.value
     }
 
     fun updateSearchingForTeam() {
@@ -105,6 +132,8 @@ class EditPlayerProfileViewModel @Inject constructor(
                 currentTeam.value,
                 firstName.value,
                 lastName.value,
+                    age.value,
+                    shoot.value,
                 mutableListOf(leagueLevel.value),
                 mutableListOf(position.value),
                 searchingForTeam.value,

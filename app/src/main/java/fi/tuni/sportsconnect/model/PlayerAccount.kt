@@ -11,6 +11,8 @@ data class PlayerAccount(
     val currentTeam: String? = null,
     val firstName: String = "",
     val lastName: String = "",
+    val age: String = "",
+    val shoot: String? = null,
     val leagueLevels: MutableList<String>? = null,
     val positions: MutableList<String>? = null,
     val searchingForTeam: Boolean = false,

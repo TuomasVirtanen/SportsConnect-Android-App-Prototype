@@ -18,15 +18,20 @@ class CreatePlayerProfileViewModel @Inject constructor(
 ) : SportsConnectAppViewModel() {
     val firstName = MutableStateFlow("")
     val lastName = MutableStateFlow("")
+    val age = MutableStateFlow("")
     val bio = MutableStateFlow("")
     val career = MutableStateFlow("")
     val city = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
     val currentTeam = MutableStateFlow("")
+    val shoot = MutableStateFlow("")
     val position = MutableStateFlow("")
     val leagueLevel = MutableStateFlow("")
     val searchingForTeam: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val strengths = MutableStateFlow("")
+    val expandedShoot = MutableStateFlow(false)
+    val expandedPos = MutableStateFlow(false)
+    val expandedLevel = MutableStateFlow(false)
 
     fun updateFirstName(newFirstName: String) {
         firstName.value = newFirstName
@@ -34,6 +39,10 @@ class CreatePlayerProfileViewModel @Inject constructor(
 
     fun updateLastName(newLastName: String) {
         lastName.value = newLastName
+    }
+
+    fun updateAge(newAge: String) {
+        age.value = newAge
     }
 
     fun updateBio(newBio: String) {
@@ -56,12 +65,28 @@ class CreatePlayerProfileViewModel @Inject constructor(
         currentTeam.value = newCurrentTeam
     }
 
+    fun updateShoot(newShoot: String) {
+        shoot.value = newShoot
+    }
+
+    fun updateExpandedShoot() {
+        expandedShoot.value = !expandedShoot.value
+    }
+
     fun updatePosition(newPosition: String) {
         position.value = newPosition
     }
 
+    fun updateExpandedPos() {
+        expandedPos.value = !expandedPos.value
+    }
+
     fun updateLeagueLevel(newLevel: String) {
         leagueLevel.value = newLevel
+    }
+
+    fun updateExpandedLevel() {
+        expandedLevel.value = !expandedLevel.value
     }
 
     fun updateSearchingForTeam() {
@@ -84,6 +109,8 @@ class CreatePlayerProfileViewModel @Inject constructor(
                 currentTeam.value,
                 firstName.value,
                 lastName.value,
+                age.value,
+                shoot.value,
                 mutableListOf(leagueLevel.value),
                 mutableListOf(position.value),
                 searchingForTeam.value,

@@ -15,10 +15,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,6 +40,7 @@ import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.viewModels.CreatePlayerProfileViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePlayerProfileScreen(
     openAndPopUp: (String, String) -> Unit,
@@ -43,15 +49,27 @@ fun CreatePlayerProfileScreen(
 ) {
     val firstName = viewModel.firstName.collectAsState()
     val lastName = viewModel.lastName.collectAsState()
+    val age = viewModel.age.collectAsState()
     val bio = viewModel.bio.collectAsState()
     val career = viewModel.career.collectAsState()
     val city = viewModel.city.collectAsState()
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val currentTeam = viewModel.currentTeam.collectAsState()
+    val shoot = viewModel.shoot.collectAsState()
     val position = viewModel.position.collectAsState()
     val leagueLevel = viewModel.leagueLevel.collectAsState()
     val searchingForTeam = viewModel.searchingForTeam.collectAsState()
     val strengths = viewModel.strengths.collectAsState()
+    val expandedShoot = viewModel.expandedShoot.collectAsState()
+    val expandedPos = viewModel.expandedPos.collectAsState()
+    val expandedLevel = viewModel.expandedLevel.collectAsState()
+
+    val shootOptions = listOf("R", "L")
+    val positionOptions = listOf("Maalivahti", "Puolustaja", "Hyökkääjä")
+    val levelOptions = listOf("F-liiga M", "F-liiga N", "M Inssi-Divari", "N Divari", "M Suomisarja",
+        "N Suomisarja", "M 2. div", "N 2. div", "M 3. div", "N 3. div", "M 4. div", "N 4. div", "M 5. div",
+        "M 6. div", "Muu")
+
 
     Column(
         modifier = modifier
@@ -99,6 +117,26 @@ fun CreatePlayerProfileScreen(
             value = lastName.value,
             onValueChange = { viewModel.updateLastName(it) },
             placeholder = { Text(stringResource(R.string.last_name)) },
+        )
+
+        OutlinedTextField(
+            singleLine = true,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp)
+                .border(
+                    BorderStroke(width = 2.dp, color = Dark),
+                    shape = RoundedCornerShape(50)
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            value = age.value,
+            onValueChange = { viewModel.updateAge(it) },
+            placeholder = { Text(stringResource(R.string.age)) },
         )
 
         OutlinedTextField(
@@ -200,45 +238,106 @@ fun CreatePlayerProfileScreen(
             placeholder = { Text(stringResource(R.string.phone_number)) },
         )
 
-        OutlinedTextField(
-            singleLine = true,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = Dark),
-                    shape = RoundedCornerShape(50)
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            value = position.value,
-            onValueChange = { viewModel.updatePosition(it) },
-            placeholder = { Text(stringResource(R.string.position)) },
-        )
+        ExposedDropdownMenuBox(
+            expanded = expandedShoot.value,
+            onExpandedChange = {viewModel.updateExpandedShoot()},
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(16.dp, 4.dp)
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = modifier.menuAnchor(),
+                readOnly = true,
+                value = shoot.value,
+                onValueChange = {},
+                label = { Text(stringResource(R.string.shoot)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedShoot.value) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expandedShoot.value,
+                onDismissRequest = { viewModel.updateExpandedShoot() },
+            ) {
+                shootOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            viewModel.updateShoot(selectionOption)
+                            viewModel.updateExpandedShoot()
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
 
-        OutlinedTextField(
-            singleLine = true,
+        ExposedDropdownMenuBox(
+            expanded = expandedPos.value,
+            onExpandedChange = {viewModel.updateExpandedPos()},
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = Dark),
-                    shape = RoundedCornerShape(50)
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            value = leagueLevel.value,
-            onValueChange = { viewModel.updateLeagueLevel(it) },
-            placeholder = { Text(stringResource(R.string.level)) },
-        )
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = modifier.menuAnchor(),
+                readOnly = true,
+                value = position.value,
+                onValueChange = {},
+                label = { Text(stringResource(R.string.position)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedPos.value) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expandedPos.value,
+                onDismissRequest = { viewModel.updateExpandedPos() },
+            ) {
+                positionOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            viewModel.updatePosition(selectionOption)
+                            viewModel.updateExpandedPos()
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
+
+        ExposedDropdownMenuBox(
+            expanded = expandedLevel.value,
+            onExpandedChange = {viewModel.updateExpandedLevel()},
+            modifier = modifier
+                .padding(16.dp, 4.dp)
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = modifier.menuAnchor(),
+                readOnly = true,
+                value = leagueLevel.value,
+                onValueChange = {},
+                label = { Text(stringResource(R.string.level)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel.value) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expandedLevel.value,
+                onDismissRequest = { viewModel.updateExpandedLevel() },
+            ) {
+                levelOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            viewModel.updateLeagueLevel(selectionOption)
+                            viewModel.updateExpandedLevel()
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
 
         OutlinedTextField(
             singleLine = false,

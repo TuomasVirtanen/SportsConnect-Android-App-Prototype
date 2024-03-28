@@ -9,11 +9,13 @@
     <string name="club_sign_up">Luo uusi tili joukkueelle</string>
     <string name="first_name">Etunimi</string>
     <string name="last_name">Sukunimi</string>
+    <string name="age">Ikä</string>
     <string name="bio">Lyhyt kuvaus itsestäsi</string>
     <string name="career">Kerro aikaisemmasta pelikokemuksestasi</string>
     <string name="city">Paikkakunta, jossa haluat pelata</string>
     <string name="current_team">Mahdollinen tämänhetkinen joukkueesi</string>
     <string name="phone_number">Puhelinnumero</string>
+    <string name="shoot">Kätisyys</string>
     <string name="position">Pelipaikka</string>
     <string name="level">Sarjataso, jossa haluat pelata</string>
     <string name="strengths">Vahvuudet pelaajana</string>
