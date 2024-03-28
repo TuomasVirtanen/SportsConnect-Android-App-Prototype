@@ -13,8 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +35,7 @@ import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.viewModels.CreateClubProfileViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateClubProfileScreen(
     openAndPopUp: (String, String) -> Unit,
@@ -42,6 +48,11 @@ fun CreateClubProfileScreen(
     val leagueLevel = viewModel.leagueLevel.collectAsState()
     val phoneNumber = viewModel.phoneNumber.collectAsState()
     val trainingPlaceAndTime = viewModel.trainingPlaceAndTime.collectAsState()
+    val expandedLevel = viewModel.expandedLevel.collectAsState()
+
+    val levelOptions = listOf("F-liiga M", "F-liiga N", "M Inssi-Divari", "N Divari", "M Suomisarja",
+        "N Suomisarja", "M 2. div", "N 2. div", "M 3. div", "N 3. div", "M 4. div", "N 4. div", "M 5. div",
+        "M 6. div", "Muu")
 
     Column(
         modifier = modifier
@@ -111,25 +122,37 @@ fun CreateClubProfileScreen(
             placeholder = { Text(stringResource(R.string.club_bio)) },
         )
 
-        OutlinedTextField(
-            singleLine = true,
+        ExposedDropdownMenuBox(
+            expanded = expandedLevel.value,
+            onExpandedChange = {viewModel.updateExpandedLevel()},
             modifier = modifier
-                .fillMaxWidth()
                 .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = Dark),
-                    shape = RoundedCornerShape(50)
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            value = leagueLevel.value,
-            onValueChange = { viewModel.updateLeagueLevel(it) },
-            placeholder = { Text(stringResource(R.string.club_level)) },
-        )
+        ) {
+            TextField(
+                modifier = modifier.menuAnchor(),
+                readOnly = true,
+                value = leagueLevel.value,
+                onValueChange = {},
+                label = { Text(stringResource(R.string.club_level)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel.value) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+            )
+            ExposedDropdownMenu(
+                expanded = expandedLevel.value,
+                onDismissRequest = { viewModel.updateExpandedLevel() },
+            ) {
+                levelOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(selectionOption) },
+                        onClick = {
+                            viewModel.updateLeagueLevel(selectionOption)
+                            viewModel.updateExpandedLevel()
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+        }
 
         OutlinedTextField(
             singleLine = true,

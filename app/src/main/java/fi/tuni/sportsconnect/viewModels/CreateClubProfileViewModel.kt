@@ -22,6 +22,7 @@ class CreateClubProfileViewModel @Inject constructor(
     val leagueLevel = MutableStateFlow("")
     val phoneNumber = MutableStateFlow("")
     val trainingPlaceAndTime = MutableStateFlow("")
+    val expandedLevel = MutableStateFlow(false)
 
     fun updateClubName(newClubName: String) {
         clubName.value = newClubName
@@ -32,6 +33,10 @@ class CreateClubProfileViewModel @Inject constructor(
 
     fun updateBio(newBio: String) {
         bio.value = newBio
+    }
+
+    fun updateExpandedLevel() {
+        expandedLevel.value = !expandedLevel.value
     }
 
     fun updateLeagueLevel(newLeagueLevel: String) {
