@@ -1,6 +1,8 @@
 package fi.tuni.sportsconnect
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -53,6 +55,7 @@ import fi.tuni.sportsconnect.screens.SplashScreen
 import fi.tuni.sportsconnect.ui.theme.SportsConnectTheme
 import fi.tuni.sportsconnect.viewModels.NavViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SportsConnectApp(
     viewModel: NavViewModel = hiltViewModel()
@@ -203,6 +206,7 @@ fun rememberAppState(navController: NavHostController = rememberNavController())
         AppState(navController)
     }
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
     composable(PLAYER_HOME_SCREEN) {
 
@@ -224,8 +228,12 @@ fun NavGraphBuilder.sportsConnectGraph(appState: AppState) {
         AddPostScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
 
-    composable(PLAYER_PROFILE_SCREEN) {
+    composable(
+        route = "$PLAYER_PROFILE_SCREEN$PLAYER_ACCOUNT_ID_ARG",
+        arguments = listOf(navArgument(PLAYER_ACCOUNT_ID) { defaultValue = PLAYER_DEFAULT_ID })
+    ) {
         PlayerProfileScreen(
+            playerId = it.arguments?.getString(PLAYER_ACCOUNT_ID) ?: PLAYER_DEFAULT_ID,
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )

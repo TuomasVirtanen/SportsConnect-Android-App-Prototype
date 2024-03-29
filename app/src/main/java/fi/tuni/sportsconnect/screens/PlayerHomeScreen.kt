@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,6 +71,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.model.Post
 import fi.tuni.sportsconnect.ui.theme.Dark
+import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.PlayerHomeViewModel
 import kotlinx.coroutines.launch
@@ -148,9 +150,7 @@ fun PlayerHomeScreen(
             }
         }
     }
-    // Sheet content
     if (openBottomSheet) {
-
         ModalBottomSheet(
             onDismissRequest = {
                 openBottomSheet = false
@@ -234,7 +234,8 @@ fun PlayerHomeScreen(
                                 }
                             }
                             viewModel.updatePosts()
-                        }
+                        },
+                        colors = ButtonColors(Violet, White, Violet, White)
                     ) {
                         Text("Suodata")
                     }
@@ -242,7 +243,8 @@ fun PlayerHomeScreen(
                     Button(
                         onClick = {
                             viewModel.clearFilters()
-                        }
+                        },
+                        colors = ButtonColors(Violet, White, Violet, White)
                     ) {
                         Text("Poista suodattimet")
                     }
@@ -437,7 +439,9 @@ fun LazyListScope.positionFilterList(onFilterClick: (String) -> Unit, filters: M
 }
 
 fun LazyListScope.levelFilterList(onFilterClick: (String) -> Unit, filters: MutableList<String>) {
-    items(listOf("M 2. divisioona", "N 2. divisioona", "M 3. divisioona", "N 3. divisioona")) {item ->
+    items(listOf("F-liiga M", "F-liiga N", "M Inssi-Divari", "N Divari", "M Suomisarja",
+        "N Suomisarja", "M 2. div", "N 2. div", "M 3. div", "N 3. div", "M 4. div", "N 4. div", "M 5. div",
+        "M 6. div", "Muu")) {item ->
         var filterChecked by remember {
             mutableStateOf( filters.any { level -> item == level })
         }

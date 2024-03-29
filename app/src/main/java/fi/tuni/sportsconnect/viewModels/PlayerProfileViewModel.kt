@@ -18,10 +18,15 @@ class PlayerProfileViewModel @Inject constructor(
     private val firestoreService: FirestoreService
 ): SportsConnectAppViewModel() {
     val playerAccount = MutableStateFlow(PlayerAccount())
+    val showActionButtons = MutableStateFlow(false)
 
-    fun initialize(restartApp: (String) -> Unit) {
+    fun initialize(playerId: String, restartApp: (String) -> Unit) {
         launchCatching {
-            playerAccount.value = firestoreService.readPlayerProfile(accountService.currentUserId) ?: PlayerAccount()
+            playerAccount.value = firestoreService.readPlayerProfile(playerId) ?:
+                firestoreService.readPlayerProfile(accountService.currentUserId) ?:
+                PlayerAccount()
+            showActionButtons.value =
+                playerAccount.value == firestoreService.readPlayerProfile(accountService.currentUserId)
         }
 
         observeAuthState(restartApp)

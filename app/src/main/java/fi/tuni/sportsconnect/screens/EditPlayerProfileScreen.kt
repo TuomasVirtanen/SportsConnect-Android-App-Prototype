@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -26,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.ui.theme.Purple200
+import fi.tuni.sportsconnect.ui.theme.Violet
+import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.EditPlayerProfileViewModel
 
 @Composable
@@ -268,7 +271,8 @@ fun EditPlayerProfileScreen(
             onClick = { viewModel.onFinishClick(openAndPopUp) },
             modifier = modifier
                 .fillMaxWidth()
-                .padding(16.dp, 0.dp)
+                .padding(16.dp, 0.dp),
+            colors = ButtonColors(Violet, White, Violet, White)
         ) {
             Text(
                 text = "Tallenna muutokset",

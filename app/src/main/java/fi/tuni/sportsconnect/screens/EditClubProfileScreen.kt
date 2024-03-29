@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -32,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.ui.theme.Purple200
+import fi.tuni.sportsconnect.ui.theme.Violet
+import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.EditClubProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -224,7 +227,8 @@ fun EditClubProfileScreen(
             onClick = { viewModel.onFinishClick(openAndPopUp) },
             modifier = modifier
                 .fillMaxWidth()
-                .padding(16.dp, 0.dp)
+                .padding(16.dp, 0.dp),
+            colors = ButtonColors(Violet, White, Violet, White)
         ) {
             Text(
                 text = "Tallenna muutokset",

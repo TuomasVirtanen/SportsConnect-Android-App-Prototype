@@ -29,7 +29,7 @@ class ClubProfileViewModel @Inject constructor(
             clubAccount.value =
                 firestoreService.readClubProfile(clubId) ?: firestoreService.readClubProfile(
                     accountService.currentUserId
-                )!!
+                ) ?: ClubAccount()
             showActionButtons.value =
                 clubAccount.value == firestoreService.readClubProfile(accountService.currentUserId)
             firestoreService.posts.collect { posts ->

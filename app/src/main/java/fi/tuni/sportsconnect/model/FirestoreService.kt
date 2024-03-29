@@ -1,6 +1,7 @@
 package fi.tuni.sportsconnect.model
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface FirestoreService {
     val players: Flow<List<PlayerAccount>>

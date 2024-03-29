@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -42,19 +43,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.ui.theme.Dark
+import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.PlayerProfileViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PlayerProfileScreen(
+    playerId: String,
     openAndPopUp: (String, String) -> Unit,
     restartApp: (String) -> Unit,
     viewModel: PlayerProfileViewModel = hiltViewModel()
 ) {
     val playerAccount = viewModel.playerAccount.collectAsState()
+    val showActionButtons = viewModel.showActionButtons.collectAsState()
 
-    LaunchedEffect(Unit) { viewModel.initialize(restartApp) }
+    LaunchedEffect(Unit) { viewModel.initialize(playerId, restartApp) }
 
     Scaffold {
         var showSignOutDialog by remember {
@@ -118,11 +122,23 @@ fun PlayerProfileScreen(
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .padding(5.dp)
+                        .padding(0.dp, 5.dp)
                 )
                 Text(
                     text = playerAccount.value.bio.orEmpty(),
                     style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = "Ikä: ${playerAccount.value.age}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(0.dp, 5.dp, 0.dp, 0.dp)
+                )
+                Text(
+                    text = "Kätisyys: ${playerAccount.value.shoot}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
                 )
             }
             item {
@@ -131,15 +147,25 @@ fun PlayerProfileScreen(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) }) {
-                        Text(text = "Muokkaa profiilia")
-                    }
-                    Row {
-                        Button(onClick = { showSignOutDialog = true }) {
-                            Text(text = "Kirjaudu ulos")
+                    if (showActionButtons.value) {
+                        Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
+                            Text(text = "Muokkaa profiilia")
                         }
-                        Button(onClick = { showDeleteAccountDialog = true }) {
-                            Text(text = "Poista tilisi")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Button(onClick = { showSignOutDialog = true },
+                                colors = ButtonColors(Violet, White, Violet, White)
+                            ) {
+                                Text(text = "Kirjaudu ulos")
+                            }
+                            Button(onClick = { showDeleteAccountDialog = true },
+                                colors = ButtonColors(Violet, White, Violet, White)) {
+                                Text(text = "Poista tilisi")
+                            }
                         }
                     }
                 }
@@ -274,7 +300,8 @@ fun PlayerProfileScreen(
                 AlertDialog(
                     title = { Text(text = "Haluatko kirjautua ulos?") },
                     dismissButton = {
-                        Button(onClick = { showSignOutDialog = false }) {
+                        Button(onClick = { showSignOutDialog = false },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
                             Text(text = "Peru")
                         }
                     },
@@ -283,7 +310,8 @@ fun PlayerProfileScreen(
                         Button(onClick = {
                             viewModel.onSignOutClick()
                             showSignOutDialog = false
-                        }) {
+                        },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
                             Text(text = "Kirjaudu ulos")
                         }
                     })
@@ -293,7 +321,8 @@ fun PlayerProfileScreen(
                     title = { Text(text = "Haluatko poistaa tilisi?") },
                     text = { Text(text = "Menetät kaikki tietosi ja tilisi poistetaan lopullisesti. Et voi perua toimintoa!") },
                     dismissButton = {
-                        Button(onClick = { showDeleteAccountDialog = false }) {
+                        Button(onClick = { showDeleteAccountDialog = false },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
                             Text(text = "Peru")
                         }
                     },
@@ -302,7 +331,8 @@ fun PlayerProfileScreen(
                         Button(onClick = {
                             viewModel.onDeleteAccountClick()
                             showDeleteAccountDialog = false
-                        }) {
+                        },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
                             Text(text = "Poista tilisi")
                         }
                     })

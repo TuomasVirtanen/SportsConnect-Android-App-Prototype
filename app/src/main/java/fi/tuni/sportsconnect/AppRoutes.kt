@@ -20,3 +20,7 @@ const val EDIT_CLUB_PROFILE_SCREEN = "EditClubProfileScreen"
 const val CLUB_ACCOUNT_ID = "clubAccountId"
 const val CLUB_DEFAULT_ID = "-1"
 const val CLUB_ACCOUNT_ID_ARG = "?$CLUB_ACCOUNT_ID={$CLUB_ACCOUNT_ID}"
+
+const val PLAYER_ACCOUNT_ID = "playerAccountId"
+const val PLAYER_DEFAULT_ID = "-1"
+const val PLAYER_ACCOUNT_ID_ARG = "?$PLAYER_ACCOUNT_ID={$PLAYER_ACCOUNT_ID}"

@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import fi.tuni.sportsconnect.R
 import fi.tuni.sportsconnect.model.Post
+import fi.tuni.sportsconnect.ui.theme.Violet
+import fi.tuni.sportsconnect.ui.theme.White
 import fi.tuni.sportsconnect.viewModels.ClubProfileViewModel
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -140,14 +144,22 @@ fun ClubProfileScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (showActionButtons.value) {
-                        Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) }) {
+                        Button(onClick = { viewModel.onEditProfileClick(openAndPopUp) },
+                            colors = ButtonColors(Violet, White, Violet, White)) {
                             Text(text = "Muokkaa profiilia")
                         }
-                        Row {
-                            Button(onClick = { showSignOutDialog = true }) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Button(onClick = { showSignOutDialog = true },
+                                colors = ButtonColors(Violet, White, Violet, White)
+                            ) {
                                 Text(text = "Kirjaudu ulos")
                             }
-                            Button(onClick = { showDeleteAccountDialog = true }) {
+                            Button(onClick = { showDeleteAccountDialog = true },
+                                colors = ButtonColors(Violet, White, Violet, White)) {
                                 Text(text = "Poista tilisi")
                             }
                         }
@@ -191,6 +203,19 @@ fun ClubProfileScreen(
                     }
 
                     Text(
+                        text = "Kausimaksu",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(10.dp, 20.dp, 0.dp, 5.dp)
+                    )
+                    Text(
+                        text = clubAccount.value.payment.orEmpty(),
+                        modifier = Modifier
+                            .padding(10.dp, 0.dp, 0.dp, 5.dp)
+                    )
+
+                    Text(
                         text = "Harjoitukset",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
@@ -219,7 +244,8 @@ fun ClubProfileScreen(
                         AlertDialog(
                             title = { Text(text = "Haluatko kirjautua ulos?") },
                             dismissButton = {
-                                Button(onClick = { showSignOutDialog = false }) {
+                                Button(onClick = { showSignOutDialog = false },
+                                    colors = ButtonColors(Violet, White, Violet, White)) {
                                     Text(text = "Peru")
                                 }
                             },
@@ -228,7 +254,8 @@ fun ClubProfileScreen(
                                 Button(onClick = {
                                     viewModel.onSignOutClick()
                                     showSignOutDialog = false
-                                }) {
+                                },
+                                    colors = ButtonColors(Violet, White, Violet, White)) {
                                     Text(text = "Kirjaudu ulos")
                                 }
                             })
@@ -241,7 +268,8 @@ fun ClubProfileScreen(
                             title = { Text(text = "Haluatko poistaa tilisi?") },
                             text = { Text(text = "Menetät kaikki tietosi ja tilisi poistetaan lopullisesti. Et voi perua toimintoa!") },
                             dismissButton = {
-                                Button(onClick = { showDeleteAccountDialog = false }) {
+                                Button(onClick = { showDeleteAccountDialog = false },
+                                    colors = ButtonColors(Violet, White, Violet, White)) {
                                     Text(text = "Peru")
                                 }
                             },
@@ -250,7 +278,8 @@ fun ClubProfileScreen(
                                 Button(onClick = {
                                     viewModel.onDeleteAccountClick()
                                     showDeleteAccountDialog = false
-                                }) {
+                                },
+                                    colors = ButtonColors(Violet, White, Violet, White)) {
                                     Text(text = "Poista tilisi")
                                 }
                             })
