@@ -17,18 +17,13 @@ class AddPostViewModel @Inject constructor(
     private val accountService: AccountService,
     private val firestoreService: FirestoreService
 ): SportsConnectAppViewModel(){
-    val position = MutableStateFlow ("Pelipaikka")
-    val header = MutableStateFlow("")
+    val position = MutableStateFlow ("")
     val text = MutableStateFlow("")
     private val clubAccount = MutableStateFlow(ClubAccount())
     val expanded = MutableStateFlow(false)
 
     fun updatePosition(newPosition: String) {
         position.value = newPosition
-    }
-
-    fun updateHeader(newHeader: String) {
-        header.value = newHeader
     }
 
     fun updateText(newText: String) {
@@ -44,14 +39,13 @@ class AddPostViewModel @Inject constructor(
             clubAccount.value = firestoreService.readClubProfile(accountService.currentUserId)!!
             firestoreService.createPost(
                 Post(
-                    header = header.value,
                     text = text.value,
-                    positions = mutableListOf(position.value) ,
+                    positions = mutableListOf(position.value),
                     club = mutableMapOf(
                         "clubId" to clubAccount.value.id,
                         "clubName" to clubAccount.value.clubName,
                         "city" to clubAccount.value.city,
-                        "leagueLevel" to clubAccount.value.leagueLevel
+                        "level" to clubAccount.value.leagueLevel
                     ),
                     created = Timestamp(Date())
                 )

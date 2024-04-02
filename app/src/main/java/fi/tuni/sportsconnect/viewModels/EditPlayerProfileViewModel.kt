@@ -50,7 +50,7 @@ class EditPlayerProfileViewModel @Inject constructor(
             shoot.value = player.value.shoot.orEmpty()
             position.value = player.value.positions?.get(0).orEmpty()
             leagueLevel.value = player.value.leagueLevels?.get(0).orEmpty()
-            searchingForTeam.value = player.value.searchingForTeam!!
+            searchingForTeam.value = player.value.searchingForTeam
             strengths.value = player.value.strengths.orEmpty()
         }
     }

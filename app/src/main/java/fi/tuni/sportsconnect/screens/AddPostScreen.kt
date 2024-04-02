@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import fi.tuni.sportsconnect.ui.theme.Dark
 import fi.tuni.sportsconnect.ui.theme.Purple200
 import fi.tuni.sportsconnect.ui.theme.Violet
 import fi.tuni.sportsconnect.ui.theme.White
@@ -42,7 +43,6 @@ fun AddPostScreen(
     viewModel: AddPostViewModel = hiltViewModel()
 ) {
     val position = viewModel.position.collectAsState()
-    val header = viewModel.header.collectAsState()
     val text = viewModel.text.collectAsState()
     val expanded = viewModel.expanded.collectAsState()
 
@@ -61,12 +61,11 @@ fun AddPostScreen(
             onExpandedChange = {viewModel.updateExpanded()}
         ) {
             TextField(
-                // The `menuAnchor` modifier must be passed to the text field for correctness.
                 modifier = modifier.menuAnchor(),
                 readOnly = true,
                 value = position.value,
                 onValueChange = {},
-                label = { Text("Label") },
+                label = { Text("Pelipaikka") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value) },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(),
             )
@@ -87,34 +86,13 @@ fun AddPostScreen(
             }
         }
 
-
-        OutlinedTextField(
-            singleLine = true,
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp, 4.dp)
-                .border(
-                    BorderStroke(width = 2.dp, color = Purple200),
-                    shape = RoundedCornerShape(50)
-                ),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            value = header.value,
-            onValueChange = { viewModel.updateHeader(it) },
-            placeholder = { Text("Otsikko") },
-        )
-
         OutlinedTextField(
             singleLine = false,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp, 4.dp)
                 .border(
-                    BorderStroke(width = 2.dp, color = Purple200),
+                    BorderStroke(width = 2.dp, color = Dark),
                     shape = RoundedCornerShape(50)
                 ),
             colors = TextFieldDefaults.colors(
@@ -123,6 +101,7 @@ fun AddPostScreen(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
+
             value = text.value,
             onValueChange = { viewModel.updateText(it) },
             placeholder = { Text("Julkaisun teksti") },

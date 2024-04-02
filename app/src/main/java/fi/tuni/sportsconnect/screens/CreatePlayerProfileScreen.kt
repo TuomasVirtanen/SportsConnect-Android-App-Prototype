@@ -19,6 +19,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -242,11 +243,9 @@ fun CreatePlayerProfileScreen(
             expanded = expandedShoot.value,
             onExpandedChange = {viewModel.updateExpandedShoot()},
                     modifier = modifier
-                        .fillMaxWidth()
                         .padding(16.dp, 4.dp)
         ) {
             TextField(
-                // The `menuAnchor` modifier must be passed to the text field for correctness.
                 modifier = modifier.menuAnchor(),
                 readOnly = true,
                 value = shoot.value,
@@ -276,11 +275,9 @@ fun CreatePlayerProfileScreen(
             expanded = expandedPos.value,
             onExpandedChange = {viewModel.updateExpandedPos()},
             modifier = modifier
-                .fillMaxWidth()
                 .padding(16.dp, 4.dp)
         ) {
             TextField(
-                // The `menuAnchor` modifier must be passed to the text field for correctness.
                 modifier = modifier.menuAnchor(),
                 readOnly = true,
                 value = position.value,
@@ -364,7 +361,9 @@ fun CreatePlayerProfileScreen(
             .padding(16.dp, 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(text = stringResource(R.string.searching_for_team))
+            Text(text = stringResource(R.string.searching_for_team),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold)
             Switch(
                 checked = searchingForTeam.value,
                 onCheckedChange = { viewModel.updateSearchingForTeam() },
@@ -390,8 +389,7 @@ fun CreatePlayerProfileScreen(
             Text(
                 text = stringResource(R.string.ready),
                 fontSize = 20.sp,
-                modifier = modifier.padding(0.dp, 6.dp),
-                fontWeight = FontWeight.Bold
+                modifier = modifier.padding(0.dp, 6.dp)
             )
         }
     }

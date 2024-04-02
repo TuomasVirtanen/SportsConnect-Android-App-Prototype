@@ -17,6 +17,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -65,8 +66,13 @@ fun EditClubProfileScreen(
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = stringResource(R.string.club_name),
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
             singleLine = true,
             modifier = modifier
@@ -84,9 +90,15 @@ fun EditClubProfileScreen(
             ),
             value = clubName.value,
             onValueChange = { viewModel.updateClubName(it) },
-            placeholder = { Text("Seuran nimi") },
+            placeholder = { Text(stringResource(R.string.club_name)) },
         )
 
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = stringResource(R.string.club_city),
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
             singleLine = true,
             modifier = modifier
@@ -104,11 +116,17 @@ fun EditClubProfileScreen(
             ),
             value = city.value,
             onValueChange = { viewModel.updateCity(it) },
-            placeholder = { Text("Seuran kotipaikkakunta") },
+            placeholder = { Text(stringResource(R.string.club_city)) },
         )
 
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = stringResource(R.string.club_bio),
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
-            singleLine = true,
+            singleLine = false,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(16.dp, 4.dp)
@@ -124,9 +142,15 @@ fun EditClubProfileScreen(
             ),
             value = bio.value,
             onValueChange = { viewModel.updateBio(it) },
-            placeholder = { Text("Lyhyt kuvaus seurasta") },
+            placeholder = { Text(stringResource(R.string.club_bio)) },
         )
 
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = stringResource(R.string.phone_number),
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
             singleLine = true,
             modifier = modifier
@@ -144,41 +168,52 @@ fun EditClubProfileScreen(
             ),
             value = phoneNumber.value,
             onValueChange = { viewModel.updatePhoneNumber(it) },
-            placeholder = { Text("Puhelinnumero") },
+            placeholder = { Text(stringResource(R.string.phone_number)) },
         )
 
-        ExposedDropdownMenuBox(
-            expanded = expandedLevel.value,
-            onExpandedChange = {viewModel.updateExpandedLevel()},
-            modifier = modifier
-                .padding(16.dp, 4.dp)
-        ) {
-            TextField(
-                modifier = modifier.menuAnchor(),
-                readOnly = true,
-                value = level.value,
-                onValueChange = {},
-                label = { Text(stringResource(R.string.club_level)) },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel.value) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            )
-            ExposedDropdownMenu(
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 15.dp, 0.dp, 0.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+            ExposedDropdownMenuBox(
                 expanded = expandedLevel.value,
-                onDismissRequest = { viewModel.updateExpandedLevel() },
+                onExpandedChange = {viewModel.updateExpandedLevel()},
+                modifier = modifier
+                    .padding(16.dp, 4.dp)
             ) {
-                levelOptions.forEach { selectionOption ->
-                    DropdownMenuItem(
-                        text = { Text(selectionOption) },
-                        onClick = {
-                            viewModel.updateLevel(selectionOption)
-                            viewModel.updateExpandedLevel()
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    )
+                TextField(
+                    modifier = modifier.menuAnchor(),
+                    readOnly = true,
+                    value = level.value,
+                    onValueChange = {},
+                    label = { Text(stringResource(R.string.club_level)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLevel.value) },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedLevel.value,
+                    onDismissRequest = { viewModel.updateExpandedLevel() },
+                ) {
+                    levelOptions.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                viewModel.updateLevel(selectionOption)
+                                viewModel.updateExpandedLevel()
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
                 }
             }
         }
 
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = stringResource(R.string.training_place),
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
             singleLine = true,
             modifier = modifier
@@ -196,9 +231,15 @@ fun EditClubProfileScreen(
             ),
             value = trainingPlaceAndTime.value,
             onValueChange = { viewModel.updateTrainingPlaceAndTime(it) },
-            placeholder = { Text("Seuran harjoituspaikat ja ajat") },
+            placeholder = { Text(stringResource(R.string.training_place)) },
         )
 
+        Text(
+            modifier = Modifier
+                .padding(30.dp, 15.dp, 0.dp, 0.dp),
+            text = "Kausimaksu",
+            style = MaterialTheme.typography.bodyLarge,
+        )
         OutlinedTextField(
             singleLine = true,
             modifier = modifier

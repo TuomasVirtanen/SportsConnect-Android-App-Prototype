@@ -291,7 +291,6 @@ fun PlayerItem(
             if (player.searchingForTeam) {
                 Text(
                     text = "Hakee uutta joukkuetta!",
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(10.dp, 5.dp)
                         .clip(CircleShape)

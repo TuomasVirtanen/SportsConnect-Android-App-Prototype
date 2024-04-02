@@ -6,7 +6,6 @@ import java.util.Date
 
 data class Post(
     @DocumentId val id: String = "",
-    val header: String = "",
     val text: String = "",
     val positions: List<String> = mutableListOf(),
     val club: Map<String, String> = mutableMapOf(),

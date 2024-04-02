@@ -202,7 +202,7 @@ fun CreateClubProfileScreen(
                 .fillMaxWidth()
                 .padding(16.dp, 4.dp)
                 .border(
-                    BorderStroke(width = 2.dp, color = Purple200),
+                    BorderStroke(width = 2.dp, color = Dark),
                     shape = RoundedCornerShape(50)
                 ),
             colors = TextFieldDefaults.colors(
